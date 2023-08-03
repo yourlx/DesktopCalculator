@@ -3,6 +3,7 @@
         xmlns:vm="using:Calculator.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
         x:Class="Calculator.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -159,7 +160,9 @@
 
             <StackPanel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsGraphSelected}"
                         Grid.RowSpan="4" MinWidth="450">
-                <TextBlock>Graph</TextBlock>
+                <lvc:CartesianChart Series="{Binding Series}"
+                                    MinHeight="{Binding WindowHeight}"
+                                    ZoomMode="Both" />
             </StackPanel>
             <StackPanel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsHistorySelected}"
                         Grid.RowSpan="4" MinWidth="450">

@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using ReactiveUI;
 
 namespace Calculator.ViewModels;
 
@@ -9,8 +11,26 @@ public class MainWindowViewModel : ViewModelBase
     private bool _isHistorySelected;
     private bool _isMathSelected = true;
 
+    private ISeries[] _series =
+    {
+        new LineSeries<double>
+        {
+            Values = new double[] { 4, 6, 5, 3, -3, -1, 2 }
+        },
+        new ColumnSeries<double>
+        {
+            Values = new double[] { 2, 5, 4, -2, 4, -3, 5 }
+        }
+    };
+
     private int _windowHeight = 450;
     private int _windowWidth = 450;
+
+    public ISeries[] Series
+    {
+        get => _series;
+        set => this.RaiseAndSetIfChanged(ref _series, value);
+    }
 
     public int MaxExpressionLength { get; init; } = 255;
 
