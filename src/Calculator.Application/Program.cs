@@ -2,7 +2,7 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 
-namespace Calculator;
+namespace Calculator.Application;
 
 internal class Program
 {

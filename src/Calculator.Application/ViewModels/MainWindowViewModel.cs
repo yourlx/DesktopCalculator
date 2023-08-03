@@ -1,8 +1,10 @@
-﻿using LiveChartsCore;
+﻿using Avalonia.Controls;
+using Calculator.Application.Views;
+using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 
-namespace Calculator.ViewModels;
+namespace Calculator.Application.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
@@ -109,5 +111,14 @@ public class MainWindowViewModel : ViewModelBase
             //
         }
         //    
+    }
+
+    public void ShowHelp(Window parent)
+    {
+        var window = new HelpWindow
+        {
+            ShowInTaskbar = false
+        };
+        window.ShowDialog(parent);
     }
 }

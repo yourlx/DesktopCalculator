@@ -1,11 +1,11 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Calculator.ViewModels"
+        xmlns:vm="using:Calculator.Application.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
-        x:Class="Calculator.Views.MainWindow"
+        x:Class="Calculator.Application.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/calculator.ico"
         Title="Calculator by yourlx"
@@ -36,7 +36,8 @@
             <!-- Menu -->
             <Menu Grid.Row="0" Grid.Column="0" DockPanel.Dock="Top">
                 <MenuItem Header="_Help" DockPanel.Dock="Right">
-                    <MenuItem Header="_Help" InputGesture="F1" HotKey="F1" />
+                    <MenuItem Header="_Help" InputGesture="F1" HotKey="F1" Command="{Binding ShowHelp}"
+                              CommandParameter="{Binding $parent[Window]}" />
                 </MenuItem>
                 <MenuItem Header="_Other">
                     <MenuItem Header="_Credit calculator" InputGesture="F2" HotKey="F2" />
