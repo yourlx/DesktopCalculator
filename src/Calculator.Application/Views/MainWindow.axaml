@@ -1,0 +1,172 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Calculator.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
+        x:Class="Calculator.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/calculator.ico"
+        Title="Calculator by yourlx"
+        MaxWidth="900"
+        MaxHeight="450"
+        Width="{Binding WindowWidth}"
+        Height="{Binding WindowHeight}"
+        CanResize="False">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button.Keys">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="CornerRadius" Value="90" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
+    </Window.Styles>
+
+    <DockPanel Margin="5">
+        <Grid RowDefinitions="Auto, Auto, Auto, *" ColumnDefinitions="*, Auto">
+            <!-- Menu -->
+            <Menu Grid.Row="0" Grid.Column="0" DockPanel.Dock="Top">
+                <MenuItem Header="_Help" DockPanel.Dock="Right">
+                    <MenuItem Header="_Help" InputGesture="F1" HotKey="F1" />
+                </MenuItem>
+                <MenuItem Header="_Other">
+                    <MenuItem Header="_Credit calculator" InputGesture="F2" HotKey="F2" />
+                </MenuItem>
+            </Menu>
+            <!-- Field -->
+            <TextBox Grid.Row="1" Grid.Column="0" Watermark="Input your expression..." TextAlignment="Right"
+                     TextWrapping="NoWrap"
+                     MaxLength="{Binding MaxExpressionLength}" FontSize="20" Margin="5" Text="{Binding Expression}" />
+            <!-- Tabs -->
+            <TabControl Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center">
+                <TabItem Header="Math" IsSelected="{Binding IsMathSelected}" />
+                <TabItem Header="Graph" IsSelected="{Binding IsGraphSelected}" />
+                <TabItem Header="History" IsSelected="{Binding IsHistorySelected}" />
+            </TabControl>
+            <!-- Buttons -->
+            <Grid Grid.Row="3" Grid.Column="0" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *, *">
+
+                <Button Grid.Row="0" Grid.Column="0" Classes="Keys" Content="x"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="0" Grid.Column="1" Classes="Keys" Content="("
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="0" Grid.Column="2" Classes="Keys" Content=")"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="0" Grid.Column="3" Classes="Keys" Content="+"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" Classes="Keys" Content="AC"
+                        Command="{Binding ClearExpression}" />
+                <Button Grid.Row="0" Grid.Column="5" Classes="Keys" Content="mod"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                <Button Grid.Row="0" Grid.Column="6" Classes="Keys" Content="sqrt"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+
+
+                <Button Grid.Row="1" Grid.Column="0" Classes="Keys" Content="7"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="1" Grid.Column="1" Classes="Keys" Content="8"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="1" Grid.Column="2" Classes="Keys" Content="9"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="1" Grid.Column="3" Classes="Keys" Content="-"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="1" Grid.Column="5" Classes="Keys" Content="sin"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                <Button Grid.Row="1" Grid.Column="6" Classes="Keys" Content="asin"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+
+                <Button Grid.Row="2" Grid.Column="0" Classes="Keys" Content="4"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="2" Grid.Column="1" Classes="Keys" Content="5"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="2" Grid.Column="2" Classes="Keys" Content="6"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="2" Grid.Column="3" Classes="Keys" Content="*"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="2" Grid.Column="4" Classes="Keys" Content="C"
+                        Command="{Binding RemoveLastSymbolFromExpression}" />
+                <Button Grid.Row="2" Grid.Column="5" Classes="Keys" Content="cos"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                <Button Grid.Row="2" Grid.Column="6" Classes="Keys" Content="acos"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+
+                <Button Grid.Row="3" Grid.Column="0" Classes="Keys" Content="1"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="3" Grid.Column="1" Classes="Keys" Content="2"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="3" Grid.Column="2" Classes="Keys" Content="3"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="3" Grid.Column="3" Classes="Keys" Content="/"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="3" Grid.Column="4" Grid.RowSpan="2" Classes="Keys" Content="="
+                        Command="{Binding Calculate}" />
+                <Button Grid.Row="3" Grid.Column="5" Classes="Keys" Content="tan"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                <Button Grid.Row="3" Grid.Column="6" Classes="Keys" Content="atan"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+
+                <Button Grid.Row="4" Grid.Column="0" Classes="Keys" Content="e"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="4" Grid.Column="1" Classes="Keys" Content="0"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="4" Grid.Column="2" Classes="Keys" Content="."
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="4" Grid.Column="3" Classes="Keys" Content="^"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content}" />
+                <Button Grid.Row="4" Grid.Column="5" Classes="Keys" Content="ln"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                <Button Grid.Row="4" Grid.Column="6" Classes="Keys" Content="log"
+                        Command="{Binding AddTokenToExpression}"
+                        CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+            </Grid>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsGraphSelected}"
+                        Grid.RowSpan="4" MinWidth="450">
+                <TextBlock>Graph</TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsHistorySelected}"
+                        Grid.RowSpan="4" MinWidth="450">
+                <TextBlock>OperationHistory</TextBlock>
+            </StackPanel>
+        </Grid>
+
+    </DockPanel>
+
+</Window>
