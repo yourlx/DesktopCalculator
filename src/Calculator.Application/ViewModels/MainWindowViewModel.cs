@@ -1,6 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Linq;
+using Avalonia.Controls;
 using Calculator.Application.Views;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 
@@ -108,7 +111,14 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (IsGraphSelected)
         {
-            //
+            var numbers = new double[] { -3, -2, -1, 0, 1, 2, 3 };
+            Series = new ISeries[]
+            {
+                new LineSeries<ObservablePoint>
+                {
+                    Values = numbers.Select(x => new ObservablePoint(x, Math.Sin(x))).ToArray()
+                },
+            };
         }
         //    
     }
