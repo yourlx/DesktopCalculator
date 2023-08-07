@@ -26,6 +26,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="LightGray" />
+            <Setter Property="FontSize" Value="20" />
         </Style>
         <Style Selector="TextBox.ExpressionBox">
             <Setter Property="Watermark" Value="Input your expression..." />
@@ -36,7 +37,7 @@
             <Setter Property="Text" Value="{Binding Expression}" />
             <Setter Property="Margin" Value="0 0" />
             <Setter Property="CaretIndex" Value="255" />
-            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="CornerRadius" Value="0" />
         </Style>
     </Window.Styles>
 
@@ -51,6 +52,7 @@
         </Menu>
         <!-- MainContent -->
         <TabControl DockPanel.Dock="Top">
+            <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
                     <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
@@ -130,7 +132,7 @@
                                 Command="{Binding AddTokenToExpression}"
                                 CommandParameter="{Binding $self.Content}" />
                         <Button Grid.Row="3" Grid.Column="4" Grid.RowSpan="2" Classes="Keys" Content="="
-                                Command="{Binding Calculate}" />
+                                Command="{Binding Calculate}" HotKey="Enter" />
                         <Button Grid.Row="3" Grid.Column="5" Classes="Keys" Content="tan"
                                 Command="{Binding AddTokenToExpression}"
                                 CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
@@ -159,12 +161,29 @@
                     </Grid>
                 </DockPanel>
             </TabItem>
+            <!-- Graph -->
             <TabItem Header="Graph">
                 <DockPanel>
                     <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                    <StackPanel DockPanel.Dock="Right" Margin="5"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock HorizontalAlignment="Center">Axis range</TextBlock>
+                        <Separator />
+                        <TextBlock HorizontalAlignment="Center">X min</TextBlock>
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                                       MaxWidth="80" MinWidth="85" Width="85" />
+                        <TextBlock HorizontalAlignment="Center">X max</TextBlock>
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <Separator Opacity="0" Height="10" />
+                        <TextBlock HorizontalAlignment="Center">Y min</TextBlock>
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <TextBlock HorizontalAlignment="Center">Y max</TextBlock>
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                    </StackPanel>
                     <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}" ZoomMode="Both" />
                 </DockPanel>
             </TabItem>
+            <!-- History -->
             <TabItem Header="History">
                 <DockPanel>
                     <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
@@ -173,6 +192,7 @@
                     </ListBox>
                 </DockPanel>
             </TabItem>
+            <!-- Credit -->
             <TabItem Header="Credit">
                 Text
             </TabItem>
