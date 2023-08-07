@@ -162,7 +162,7 @@
                 </DockPanel>
             </TabItem>
             <!-- Graph -->
-            <TabItem Header="Graph">
+            <TabItem Header="Graph" IsSelected="{Binding IsGraphSelected}">
                 <DockPanel>
                     <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
                     <StackPanel DockPanel.Dock="Right" Margin="5"

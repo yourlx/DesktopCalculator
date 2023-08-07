@@ -2,20 +2,22 @@
 using System.Linq;
 using Avalonia.Controls;
 using Calculator.Application.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
-using ReactiveUI;
 
 namespace Calculator.Application.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private string _expression = string.Empty;
-    private bool _isGraphSelected;
-    private bool _isHistorySelected;
-    private bool _isMathSelected = true;
 
+    [ObservableProperty]
+    private bool _isGraphSelected;
+
+    [ObservableProperty]
     private ISeries[] _series =
     {
         new LineSeries<double>
@@ -28,64 +30,13 @@ public class MainWindowViewModel : ViewModelBase
         }
     };
 
+    [ObservableProperty]
     private int _windowHeight = 450;
+
+    [ObservableProperty]
     private int _windowWidth = 450;
 
-    public ISeries[] Series
-    {
-        get => _series;
-        set => this.RaiseAndSetIfChanged(ref _series, value);
-    }
-
     public int MaxExpressionLength { get; init; } = 255;
-
-    public string Expression
-    {
-        get => _expression;
-        set => this.RaiseAndSetIfChanged(ref _expression, value);
-    }
-
-    public int WindowHeight
-    {
-        get => _windowHeight;
-        set => this.RaiseAndSetIfChanged(ref _windowHeight, value);
-    }
-
-    public int WindowWidth
-    {
-        get => _windowWidth;
-        set => this.RaiseAndSetIfChanged(ref _windowWidth, value);
-    }
-
-    public bool IsMathSelected
-    {
-        get => _isMathSelected;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _isMathSelected, value);
-            ResizeWindow();
-        }
-    }
-
-    public bool IsGraphSelected
-    {
-        get => _isGraphSelected;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _isGraphSelected, value);
-            ResizeWindow();
-        }
-    }
-
-    public bool IsHistorySelected
-    {
-        get => _isHistorySelected;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _isHistorySelected, value);
-            ResizeWindow();
-        }
-    }
 
     public void AddTokenToExpression(string token)
     {
@@ -100,11 +51,6 @@ public class MainWindowViewModel : ViewModelBase
     public void ClearExpression()
     {
         Expression = string.Empty;
-    }
-
-    private void ResizeWindow()
-    {
-        WindowWidth = IsMathSelected ? 450 : 900;
     }
 
     public void Calculate()
