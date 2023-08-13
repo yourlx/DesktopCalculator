@@ -74,7 +74,7 @@
                                 Command="{Binding ClearExpression}" />
                         <Button Grid.Row="0" Grid.Column="5" Classes="Keys" Content="mod"
                                 Command="{Binding AddTokenToExpression}"
-                                CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
+                                CommandParameter="{Binding $self.Content}" />
                         <Button Grid.Row="0" Grid.Column="6" Classes="Keys" Content="sqrt"
                                 Command="{Binding AddTokenToExpression}"
                                 CommandParameter="{Binding $self.Content, StringFormat='{}{0}('}" />
