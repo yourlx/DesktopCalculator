@@ -167,16 +167,20 @@
                         <Separator />
                         <TextBlock HorizontalAlignment="Center">X min</TextBlock>
                         <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
-                                       MaxWidth="80" MinWidth="85" Width="85" />
+                                       MaxWidth="80" MinWidth="85" Width="85"
+                                       Value="{Binding XMin}" />
                         <TextBlock HorizontalAlignment="Center">X max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                                       Value="{Binding XMax}" />
                         <Separator Opacity="0" Height="10" />
                         <TextBlock HorizontalAlignment="Center">Y min</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                                       Value="{Binding YMin}" />
                         <TextBlock HorizontalAlignment="Center">Y max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                                       Value="{Binding YMax}" />
                     </StackPanel>
-                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}" ZoomMode="Both" />
+                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}" />
                 </DockPanel>
             </TabItem>
             <!-- History -->

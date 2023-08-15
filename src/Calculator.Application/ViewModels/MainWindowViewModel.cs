@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,6 +11,17 @@ namespace Calculator.Application.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly MathCalculatorWrapper _calculator = new();
+    
+    public MainWindowViewModel()
+    {
+        PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
+            {
+                Calculate();
+            }
+        };
+    }
 
     #region Observable properties
 
@@ -29,6 +39,18 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private int _maxExpressionLength = 255;
+
+    [ObservableProperty]
+    private double? _xMin = -5;
+
+    [ObservableProperty]
+    private double? _xMax = 5;
+
+    [ObservableProperty]
+    private double? _yMin = -1;
+
+    [ObservableProperty]
+    private double? _yMax = 1;
 
     #endregion
 
@@ -83,11 +105,25 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Series.Clear();
 
-        var values = new List<ObservablePoint>();
+        const int numberOfPoints = 500 - 1;
+        var step = (XMax!.Value - XMin!.Value) / numberOfPoints;
+
+        var values = new ObservablePoint[numberOfPoints];
+
+        for (var i = 0; i < numberOfPoints; ++i)
+        {
+            var x = XMin.Value + step * i;
+            double? y = _calculator.Calculate(x);
+            if (y < YMin || y > YMax) y = null;
+            values[i] = new ObservablePoint(x, y);
+        }
 
         Series.Add(new LineSeries<ObservablePoint>
         {
-            Values = values.ToArray(),
+            Values = values,
+            GeometryFill = null,
+            GeometryStroke = null,
+            Fill = null
         });
     }
 
