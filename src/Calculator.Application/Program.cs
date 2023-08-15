@@ -1,6 +1,5 @@
 ﻿using System;
 using Avalonia;
-using Avalonia.ReactiveUI;
 
 namespace Calculator.Application;
 
@@ -22,7 +21,6 @@ internal class Program
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace()
-            .UseReactiveUI();
+            .LogToTrace();
     }
 }
