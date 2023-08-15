@@ -1,6 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
@@ -11,36 +11,37 @@ namespace Calculator.Application.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    private readonly MathCalculatorWrapper _calculator = new();
+
+    #region Observable properties
+
     [ObservableProperty]
     private string _expression = string.Empty;
 
     [ObservableProperty]
-    private bool _isGraphSelected;
+    private bool _isGraphSelected = false;
 
     [ObservableProperty]
-    private ISeries[] _series =
-    {
-        new LineSeries<double>
-        {
-            Values = new double[] { 4, 6, 5, 3, -3, -1, 2 }
-        },
-        new ColumnSeries<double>
-        {
-            Values = new double[] { 2, 5, 4, -2, 4, -3, 5 }
-        }
-    };
-
-    private readonly MathCalculatorWrapper _calculator = new();
+    private ObservableCollection<ISeries> _series = new();
 
     [ObservableProperty]
-    private bool _isExpressionCorrect;
+    private bool _isExpressionCorrect = false;
+
+    [ObservableProperty]
+    private int _maxExpressionLength = 255;
+
+    #endregion
+
+    #region Events
 
     partial void OnExpressionChanged(string value)
     {
         IsExpressionCorrect = _calculator.CheckValidAndCovert(value);
     }
 
-    public int MaxExpressionLength { get; init; } = 255;
+    #endregion
+
+    #region Commands
 
     public void AddTokenToExpression(string token)
     {
@@ -61,20 +62,34 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (!IsExpressionCorrect) return;
 
-        if (IsGraphSelected)
-        {
-            var numbers = new double[] { -3, -2, -1, 0, 1, 2, 3 };
-            Series = new ISeries[]
-            {
-                new LineSeries<ObservablePoint>
-                {
-                    Values = numbers.Select(x => new ObservablePoint(x, Math.Sin(x))).ToArray()
-                },
-            };
-        }
-        else
-        {
-            Expression = _calculator.Calculate().ToString("0.#######", CultureInfo.InvariantCulture);
-        }
+        if (IsGraphSelected) CalculateGraph();
+        else CalculateExpression();
     }
+
+    #endregion
+
+    #region Math
+
+    private void CalculateExpression()
+    {
+        Expression = _calculator.Calculate().ToString("0.#######", CultureInfo.InvariantCulture);
+    }
+
+    #endregion
+
+    #region Graph
+
+    private void CalculateGraph()
+    {
+        Series.Clear();
+
+        var values = new List<ObservablePoint>();
+
+        Series.Add(new LineSeries<ObservablePoint>
+        {
+            Values = values.ToArray(),
+        });
+    }
+
+    #endregion
 }
