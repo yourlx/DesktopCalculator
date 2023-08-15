@@ -43,7 +43,11 @@
 
     <DockPanel Margin="5">
         <!-- MainContent -->
-        <TabControl DockPanel.Dock="Top">
+        <TabControl DockPanel.Dock="Top" SelectedIndex="1">
+            <!-- Help -->
+            <TabItem Header="Help">
+                Text
+            </TabItem>
             <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
@@ -183,10 +187,6 @@
                         <ListBoxItem>Text</ListBoxItem>
                     </ListBox>
                 </DockPanel>
-            </TabItem>
-            <!-- Credit -->
-            <TabItem Header="Credit">
-                Text
             </TabItem>
         </TabControl>
     </DockPanel>
