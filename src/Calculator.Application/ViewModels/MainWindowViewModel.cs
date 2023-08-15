@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Avalonia.Controls;
-using Calculator.Application.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -29,12 +27,6 @@ public partial class MainWindowViewModel : ViewModelBase
             Values = new double[] { 2, 5, 4, -2, 4, -3, 5 }
         }
     };
-
-    [ObservableProperty]
-    private int _windowHeight = 450;
-
-    [ObservableProperty]
-    private int _windowWidth = 450;
 
     public int MaxExpressionLength { get; init; } = 255;
 
@@ -67,14 +59,5 @@ public partial class MainWindowViewModel : ViewModelBase
             };
         }
         //    
-    }
-
-    public void ShowHelp(Window parent)
-    {
-        var window = new HelpWindow
-        {
-            ShowInTaskbar = false
-        };
-        window.ShowDialog(parent);
     }
 }
