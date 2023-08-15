@@ -9,8 +9,8 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/calculator.ico"
         Title="Calculator by yourlx"
-        MaxWidth="550"
-        MaxHeight="500"
+        MaxWidth="600"
+        MaxHeight="470"
         CanResize="False">
 
     <Design.DataContext>
@@ -42,16 +42,12 @@
     </Window.Styles>
 
     <DockPanel Margin="5">
-        <!-- Menu -->
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Help">
-                <MenuItem Header="_Help" InputGesture="F1" HotKey="F1"
-                          Command="{Binding ShowHelp}"
-                          CommandParameter="{Binding $parent[Window]}" />
-            </MenuItem>
-        </Menu>
         <!-- MainContent -->
-        <TabControl DockPanel.Dock="Top">
+        <TabControl DockPanel.Dock="Top" SelectedIndex="1">
+            <!-- Help -->
+            <TabItem Header="Help">
+                Text
+            </TabItem>
             <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
@@ -191,10 +187,6 @@
                         <ListBoxItem>Text</ListBoxItem>
                     </ListBox>
                 </DockPanel>
-            </TabItem>
-            <!-- Credit -->
-            <TabItem Header="Credit">
-                Text
             </TabItem>
         </TabControl>
     </DockPanel>
