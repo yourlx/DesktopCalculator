@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -28,6 +30,16 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     };
 
+    private readonly MathCalculatorWrapper _calculator = new();
+
+    [ObservableProperty]
+    private bool _isExpressionCorrect;
+
+    partial void OnExpressionChanged(string value)
+    {
+        IsExpressionCorrect = _calculator.CheckValidAndCovert(value);
+    }
+
     public int MaxExpressionLength { get; init; } = 255;
 
     public void AddTokenToExpression(string token)
@@ -47,6 +59,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void Calculate()
     {
+        if (!IsExpressionCorrect) return;
+
         if (IsGraphSelected)
         {
             var numbers = new double[] { -3, -2, -1, 0, 1, 2, 3 };
@@ -58,6 +72,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 },
             };
         }
-        //    
+        else
+        {
+            Expression = _calculator.Calculate().ToString("0.#######", CultureInfo.InvariantCulture);
+        }
     }
 }
