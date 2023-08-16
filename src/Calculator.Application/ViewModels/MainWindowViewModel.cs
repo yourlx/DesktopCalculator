@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
@@ -11,7 +12,7 @@ namespace Calculator.Application.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly MathCalculatorWrapper _calculator = new();
-    
+
     public MainWindowViewModel()
     {
         PropertyChanged += (_, args) =>
@@ -52,13 +53,24 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private double? _yMax = 1;
 
+    [ObservableProperty]
+    private double? _variable = 0;
+
+    [ObservableProperty]
+    private bool _hasVariable = false;
+
+    [ObservableProperty]
+    private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
+
     #endregion
 
     #region Events
 
     partial void OnExpressionChanged(string value)
     {
+        Expression = Expression.ToLower();
         IsExpressionCorrect = _calculator.CheckValidAndCovert(value);
+        HasVariable = IsExpressionCorrect && Expression.Contains('x');
     }
 
     #endregion
@@ -94,7 +106,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateExpression()
     {
-        Expression = _calculator.Calculate().ToString("0.#######", CultureInfo.InvariantCulture);
+        Expression = _calculator.Calculate(Variable!.Value).ToString("0.#######", CultureInfo.InvariantCulture);
     }
 
     #endregion
