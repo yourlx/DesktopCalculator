@@ -187,21 +187,25 @@
                         <TextBlock HorizontalAlignment="Center">Axis range</TextBlock>
                         <Separator />
                         <TextBlock HorizontalAlignment="Center">X min</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="-1000000" Maximum="{Binding XMax}"
                                        MaxWidth="80" MinWidth="85" Width="85"
                                        Value="{Binding XMin}"
                                        NumberFormat="{Binding NumberStyle}" />
                         <TextBlock HorizontalAlignment="Center">X max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="{Binding XMin}" Maximum="1000000"
                                        Value="{Binding XMax}"
                                        NumberFormat="{Binding NumberStyle}" />
                         <Separator Opacity="0" Height="10" />
                         <TextBlock HorizontalAlignment="Center">Y min</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="-1000000" Maximum="{Binding YMax}"
                                        Value="{Binding YMin}"
                                        NumberFormat="{Binding NumberStyle}" />
                         <TextBlock HorizontalAlignment="Center">Y max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="{Binding YMin}" Maximum="1000000"
                                        Value="{Binding YMax}"
                                        NumberFormat="{Binding NumberStyle}" />
                     </StackPanel>
