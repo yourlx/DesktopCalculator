@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
@@ -11,19 +10,6 @@ namespace Calculator.Application.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly MathCalculatorWrapper _calculator = new();
-
-    public MainWindowViewModel()
-    {
-        PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
-            {
-                Calculate();
-            }
-        };
-    }
-
     #region Observable properties
 
     [ObservableProperty]
@@ -57,20 +43,33 @@ public partial class MainWindowViewModel : ViewModelBase
     private double? _variable = 0;
 
     [ObservableProperty]
-    private bool _hasVariable = false;
+    private bool _isExpressionWithVariable = false;
 
     [ObservableProperty]
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
     #endregion
 
+    private readonly MathCalculatorWrapper _calculator = new();
+
+    public MainWindowViewModel()
+    {
+        PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
+            {
+                Calculate();
+            }
+        };
+    }
+
     #region Events
 
     partial void OnExpressionChanged(string value)
     {
-        Expression = Expression.ToLower();
+        Expression = value.ToLower();
         IsExpressionCorrect = _calculator.CheckValidAndCovert(value);
-        HasVariable = IsExpressionCorrect && Expression.Contains('x');
+        IsExpressionWithVariable = IsExpressionCorrect && value.Contains('x');
     }
 
     #endregion
@@ -84,7 +83,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void RemoveLastSymbolFromExpression()
     {
-        Expression = string.IsNullOrEmpty(Expression) ? string.Empty : Expression[..^1];
+        Expression = string.IsNullOrWhiteSpace(Expression) ? string.Empty : Expression[..^1];
     }
 
     public void ClearExpression()
@@ -117,7 +116,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Series.Clear();
 
-        const int numberOfPoints = 500 - 1;
+        const int numberOfPoints = 500;
         var step = (XMax!.Value - XMin!.Value) / numberOfPoints;
 
         var values = new ObservablePoint[numberOfPoints];

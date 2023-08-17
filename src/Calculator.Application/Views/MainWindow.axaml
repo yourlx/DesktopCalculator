@@ -62,7 +62,7 @@
                         <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
                         <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
                                        Value="{Binding Variable}"
-                                       IsEnabled="{Binding HasVariable}"
+                                       IsEnabled="{Binding IsExpressionWithVariable}"
                                        BorderThickness="0" HorizontalContentAlignment="Right"
                                        FormatString="0.#######"
                                        NumberFormat="{Binding NumberStyle}" />
@@ -223,7 +223,7 @@
                         <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
                         <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
                                        Value="{Binding Variable}"
-                                       IsEnabled="{Binding HasVariable}"
+                                       IsEnabled="{Binding IsExpressionWithVariable}"
                                        BorderThickness="0" HorizontalContentAlignment="Right"
                                        FormatString="0.#######"
                                        NumberFormat="{Binding NumberStyle}" />
