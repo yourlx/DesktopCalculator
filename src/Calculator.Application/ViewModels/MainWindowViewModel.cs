@@ -85,8 +85,12 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
-        IsExpressionCorrect = _calculator.CheckValidAndConvert(value);
-        IsExpressionWithVariable = IsExpressionCorrect && value.Contains('x');
+        IsExpressionCorrect = _calculator.CheckValid(value);
+        if (IsExpressionCorrect)
+        {
+            IsExpressionWithVariable = value.Contains('x');
+            _calculator.ConvertToPolish();
+        }
     }
 
     #endregion

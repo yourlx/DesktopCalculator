@@ -22,9 +22,14 @@ public class MathCalculatorWrapper : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public bool CheckValidAndConvert(string expression)
+    public bool CheckValid(string expression)
     {
-        return CheckValidAndConvert(_calculator, expression);
+        return CheckValid(_calculator, expression);
+    }
+
+    public void ConvertToPolish()
+    {
+        ConvertToPolish(_calculator);
     }
 
     public double Calculate(double x = 0)
@@ -33,7 +38,10 @@ public class MathCalculatorWrapper : IDisposable
     }
 
     [DllImport("calculatorcore")]
-    private static extern bool CheckValidAndConvert(IntPtr ptr, string expression);
+    private static extern bool CheckValid(IntPtr ptr, string expression);
+
+    [DllImport("calculatorcore")]
+    private static extern bool ConvertToPolish(IntPtr ptr);
 
     [DllImport("calculatorcore")]
     private static extern double Calculate(IntPtr ptr, double x = 0);
