@@ -22,9 +22,9 @@ public class MathCalculatorWrapper : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public bool CheckValidAndCovert(string expression)
+    public bool CheckValidAndConvert(string expression)
     {
-        return CheckValidAndCovert(_calculator, expression);
+        return CheckValidAndConvert(_calculator, expression);
     }
 
     public double Calculate(double x = 0)
@@ -33,7 +33,7 @@ public class MathCalculatorWrapper : IDisposable
     }
 
     [DllImport("calculatorcore")]
-    private static extern bool CheckValidAndCovert(IntPtr ptr, string expression);
+    private static extern bool CheckValidAndConvert(IntPtr ptr, string expression);
 
     [DllImport("calculatorcore")]
     private static extern double Calculate(IntPtr ptr, double x = 0);

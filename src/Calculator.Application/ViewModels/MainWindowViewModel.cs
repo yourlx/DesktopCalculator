@@ -68,7 +68,7 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
-        IsExpressionCorrect = _calculator.CheckValidAndCovert(value);
+        IsExpressionCorrect = _calculator.CheckValidAndConvert(value);
         IsExpressionWithVariable = IsExpressionCorrect && value.Contains('x');
     }
 
