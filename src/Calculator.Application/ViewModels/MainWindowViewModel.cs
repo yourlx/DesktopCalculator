@@ -69,13 +69,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        PropertyChanged += (_, args) =>
+        PropertyChanged += OnPropertyChangedEventHandler;
+    }
+
+    private void OnPropertyChangedEventHandler(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
         {
-            if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
-            {
-                Calculate();
-            }
-        };
+            Calculate();
+        }
     }
 
     #region Events
