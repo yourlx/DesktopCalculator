@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using Calculator.Core.Math;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,7 +20,21 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _isGraphSelected = false;
 
     [ObservableProperty]
-    private ObservableCollection<ISeries> _series = new();
+    private ObservableCollection<ISeries> _series = new()
+    {
+        new LineSeries<ObservablePoint>
+        {
+            GeometryFill = null,
+            GeometryStroke = null,
+            Fill = null
+        }
+    };
+
+    [ObservableProperty]
+    private ObservableCollection<Axis> _xAxes = new(new[] { new Axis() });
+
+    [ObservableProperty]
+    private ObservableCollection<Axis> _yAxes = new(new[] { new Axis() });
 
     [ObservableProperty]
     private bool _isExpressionCorrect = false;
@@ -114,8 +129,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateGraph()
     {
-        Series.Clear();
-
         const int numberOfPoints = 500;
         var step = (XMax!.Value - XMin!.Value) / numberOfPoints;
 
@@ -129,13 +142,13 @@ public partial class MainWindowViewModel : ViewModelBase
             values[i] = new ObservablePoint(x, y);
         }
 
-        Series.Add(new LineSeries<ObservablePoint>
-        {
-            Values = values,
-            GeometryFill = null,
-            GeometryStroke = null,
-            Fill = null
-        });
+        XAxes[0].MinLimit = XMin;
+        XAxes[0].MaxLimit = XMax;
+
+        YAxes[0].MinLimit = YMin;
+        YAxes[0].MaxLimit = YMax;
+
+        Series[0].Values = values;
     }
 
     #endregion

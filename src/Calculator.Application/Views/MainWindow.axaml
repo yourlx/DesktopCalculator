@@ -209,7 +209,9 @@
                                        Value="{Binding YMax}"
                                        NumberFormat="{Binding NumberStyle}" />
                     </StackPanel>
-                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}" />
+                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}"
+                                        XAxes="{Binding XAxes}"
+                                        YAxes="{Binding YAxes}" />
                 </DockPanel>
             </TabItem>
             <!-- History -->
