@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Application", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Math", "Calculator.Core.Math\Calculator.Core.Math.csproj", "{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Test", "Calculator.Core.Test\Calculator.Core.Test.csproj", "{49C30C54-A1AA-4EBD-9EE7-527595345E1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C30C54-A1AA-4EBD-9EE7-527595345E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C30C54-A1AA-4EBD-9EE7-527595345E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C30C54-A1AA-4EBD-9EE7-527595345E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C30C54-A1AA-4EBD-9EE7-527595345E1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
