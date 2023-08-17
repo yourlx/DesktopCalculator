@@ -4,18 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
-        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="500"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="530"
         x:Class="Calculator.Application.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/calculator.ico"
         Title="Calculator by yourlx"
         MaxWidth="600"
-        MaxHeight="470"
+        MaxHeight="530"
         CanResize="False">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
+
+    <!-- TODO: refactor axaml file, maybe move something to control -->
 
     <Window.Styles>
         <Style Selector="Button.Keys">
@@ -33,11 +35,12 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="TextWrapping" Value="NoWrap" />
             <Setter Property="MaxLength" Value="{Binding MaxExpressionLength}" />
-            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="Text" Value="{Binding Expression}" />
             <Setter Property="Margin" Value="0 0" />
             <Setter Property="CaretIndex" Value="{Binding Expression.Length}" />
             <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0"></Setter>
         </Style>
     </Window.Styles>
 
@@ -51,7 +54,19 @@
             <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
-                    <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                    <DockPanel DockPanel.Dock="Top">
+                        <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
+                                       Value="{Binding Variable}"
+                                       IsEnabled="{Binding IsExpressionWithVariable}"
+                                       BorderThickness="0" HorizontalContentAlignment="Right"
+                                       FormatString="0.#######"
+                                       NumberFormat="{Binding NumberStyle}" />
+                    </DockPanel>
                     <!-- Keyboard -->
                     <Grid DockPanel.Dock="Top" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *, *">
                         <Button Grid.Row="0" Grid.Column="0" Classes="Keys" Content="x"
@@ -160,29 +175,61 @@
             <!-- Graph -->
             <TabItem Header="Graph" IsSelected="{Binding IsGraphSelected}">
                 <DockPanel>
-                    <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                    <DockPanel DockPanel.Dock="Top">
+                        <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" Background="Transparent" />
+                    </DockPanel>
                     <StackPanel DockPanel.Dock="Right" Margin="5"
                                 VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock HorizontalAlignment="Center">Axis range</TextBlock>
                         <Separator />
                         <TextBlock HorizontalAlignment="Center">X min</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000"
-                                       MaxWidth="80" MinWidth="85" Width="85" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="-1000000" Maximum="{Binding XMax}"
+                                       MaxWidth="80" MinWidth="85" Width="85"
+                                       Value="{Binding XMin}"
+                                       NumberFormat="{Binding NumberStyle}" />
                         <TextBlock HorizontalAlignment="Center">X max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="{Binding XMin}" Maximum="1000000"
+                                       Value="{Binding XMax}"
+                                       NumberFormat="{Binding NumberStyle}" />
                         <Separator Opacity="0" Height="10" />
                         <TextBlock HorizontalAlignment="Center">Y min</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="-1000000" Maximum="{Binding YMax}"
+                                       Value="{Binding YMin}"
+                                       NumberFormat="{Binding NumberStyle}" />
                         <TextBlock HorizontalAlignment="Center">Y max</TextBlock>
-                        <NumericUpDown ShowButtonSpinner="False" Increment="1" Minimum="-1000000" Maximum="1000000" />
+                        <NumericUpDown ShowButtonSpinner="False" Increment="1"
+                                       Minimum="{Binding YMin}" Maximum="1000000"
+                                       Value="{Binding YMax}"
+                                       NumberFormat="{Binding NumberStyle}" />
                     </StackPanel>
-                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}" ZoomMode="Both" />
+                    <lvc:CartesianChart DockPanel.Dock="Top" Series="{Binding Series}"
+                                        XAxes="{Binding XAxes}"
+                                        YAxes="{Binding YAxes}" />
                 </DockPanel>
             </TabItem>
             <!-- History -->
             <TabItem Header="History">
                 <DockPanel>
-                    <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                    <DockPanel DockPanel.Dock="Top">
+                        <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
+                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
+                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
+                                       Value="{Binding Variable}"
+                                       IsEnabled="{Binding IsExpressionWithVariable}"
+                                       BorderThickness="0" HorizontalContentAlignment="Right"
+                                       FormatString="0.#######"
+                                       NumberFormat="{Binding NumberStyle}" />
+                    </DockPanel>
                     <ListBox DockPanel.Dock="Top" Margin="0 5">
                         <ListBoxItem>Text</ListBoxItem>
                     </ListBox>

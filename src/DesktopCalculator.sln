@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Application", "Calculator.Application\Calculator.Application.csproj", "{44401E4B-D083-4F52-9A2E-1E5AB514EE66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Math", "Calculator.Core.Math\Calculator.Core.Math.csproj", "{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,11 @@ Global
 		{44401E4B-D083-4F52-9A2E-1E5AB514EE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44401E4B-D083-4F52-9A2E-1E5AB514EE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44401E4B-D083-4F52-9A2E-1E5AB514EE66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
