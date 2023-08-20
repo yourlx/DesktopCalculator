@@ -9,9 +9,11 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/calculator.ico"
         Title="Calculator by yourlx"
-        MaxWidth="600"
-        MaxHeight="530"
-        CanResize="False">
+        MinWidth="600"
+        MinHeight="530"
+        Width="600"
+        Height="530"
+        CanResize="True">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
