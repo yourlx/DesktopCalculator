@@ -219,19 +219,6 @@
             <!-- History -->
             <TabItem Header="History">
                 <DockPanel>
-                    <DockPanel DockPanel.Dock="Top">
-                        <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
-                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
-                                       Value="{Binding Variable}"
-                                       IsEnabled="{Binding IsExpressionWithVariable}"
-                                       BorderThickness="0" HorizontalContentAlignment="Right"
-                                       FormatString="0.#######"
-                                       NumberFormat="{Binding NumberStyle}" />
-                    </DockPanel>
                     <ListBox DockPanel.Dock="Top" Margin="0 5">
                         <ListBoxItem>Text</ListBoxItem>
                     </ListBox>
