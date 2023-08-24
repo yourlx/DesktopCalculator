@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using Calculator.Core.Math;
+using Calculator.HistoryService;
+using Calculator.HistoryService.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -63,6 +66,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
+    [ObservableProperty]
+    private IHistoryService _historyService = new HistoryService.HistoryService();
+
     #endregion
 
     private readonly MathCalculatorWrapper _calculator = new();
@@ -119,6 +125,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public void Calculate()
     {
         if (!IsExpressionCorrect) return;
+
+        var historyEntry = new HistoryEntry(Expression);
+        if (!(HistoryService.HistoryEntries.Count > 0 &&
+              HistoryService.HistoryEntries.First().Expression == Expression))
+        {
+            HistoryService.SaveEntryToHistory(historyEntry);
+        }
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
