@@ -91,6 +91,10 @@ public partial class MainWindowViewModel : ViewModelBase
             IsExpressionWithVariable = value.Contains('x');
             _calculator.ConvertToPolish();
         }
+        else
+        {
+            IsExpressionWithVariable = false;
+        }
     }
 
     #endregion
