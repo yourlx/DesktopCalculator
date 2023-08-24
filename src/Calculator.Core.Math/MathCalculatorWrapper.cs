@@ -41,7 +41,7 @@ public class MathCalculatorWrapper : IDisposable
     private static extern bool CheckValid(IntPtr ptr, string expression);
 
     [DllImport("calculatorcore")]
-    private static extern bool ConvertToPolish(IntPtr ptr);
+    private static extern void ConvertToPolish(IntPtr ptr);
 
     [DllImport("calculatorcore")]
     private static extern double Calculate(IntPtr ptr, double x = 0);
