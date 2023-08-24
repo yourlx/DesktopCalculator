@@ -37,11 +37,11 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="TextWrapping" Value="NoWrap" />
             <Setter Property="MaxLength" Value="{Binding MaxExpressionLength}" />
-            <Setter Property="FontSize" Value="15" />
             <Setter Property="Text" Value="{Binding Expression}" />
             <Setter Property="Margin" Value="0 0" />
             <Setter Property="CaretIndex" Value="{Binding Expression.Length}" />
             <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="BorderThickness" Value="0"></Setter>
         </Style>
     </Window.Styles>
@@ -56,18 +56,19 @@
             <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
-                    <DockPanel DockPanel.Dock="Top">
+                    <DockPanel DockPanel.Dock="Top" MinHeight="65" Height="65" MaxHeight="65">
                         <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
-                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
+                        <NumericUpDown DockPanel.Dock="Bottom" ShowButtonSpinner="False"
                                        Value="{Binding Variable}"
-                                       IsEnabled="{Binding IsExpressionWithVariable}"
                                        BorderThickness="0" HorizontalContentAlignment="Right"
                                        FormatString="0.#######"
-                                       NumberFormat="{Binding NumberStyle}" />
+                                       NumberFormat="{Binding NumberStyle}"
+                                       FontSize="15"
+                                       IsVisible="{Binding IsExpressionWithVariable}" />
+                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" VerticalContentAlignment="Center" />
                     </DockPanel>
                     <!-- Keyboard -->
                     <Grid DockPanel.Dock="Top" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *, *">
