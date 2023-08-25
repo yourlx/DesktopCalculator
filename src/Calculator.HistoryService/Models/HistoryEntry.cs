@@ -9,15 +9,13 @@ public class HistoryEntry
 
     [JsonPropertyName("answer")]
     public string? Answer { get; }
-    
+
     [JsonPropertyName("variable")]
     public double? Variable { get; }
-    
+
     [JsonPropertyName("graph_visible_area")]
     public GraphVisibleArea? GraphVisibleArea { get; }
 
-    // for math
-    // todo: add min/max x,y
     public HistoryEntry(string expression,
         double? variable = null,
         string? answer = null,
