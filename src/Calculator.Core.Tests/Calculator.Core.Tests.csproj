@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Calculator.Core.Math\Calculator.Core.Math.csproj" />
+        <ProjectReference Include="..\Calculator.Core.Math\Calculator.Core.Math.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Application", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Math", "Calculator.Core.Math\Calculator.Core.Math.csproj", "{2BEC6D44-99FE-4196-8CDF-E3D9979C717B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Test", "Calculator.Core.Test\Calculator.Core.Test.csproj", "{49C30C54-A1AA-4EBD-9EE7-527595345E1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Core.Tests", "Calculator.Core.Tests\Calculator.Core.Tests.csproj", "{49C30C54-A1AA-4EBD-9EE7-527595345E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

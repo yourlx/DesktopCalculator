@@ -1,6 +1,4 @@
-using NUnit.Framework;
-
-namespace Calculator.Core.Test;
+namespace Calculator.Core.Tests;
 
 public class MathCalculatorWrapperTests
 {
