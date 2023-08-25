@@ -13,7 +13,7 @@ public class HistoryEntry
     [JsonPropertyName("variable")]
     public double? Variable { get; }
 
-    [JsonPropertyName("graph_visible_area")]
+    [JsonPropertyName("graphVisibleArea")]
     public GraphVisibleArea? GraphVisibleArea { get; }
 
     public HistoryEntry(string expression,
