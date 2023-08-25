@@ -6,17 +6,17 @@ namespace Calculator.HistoryService;
 
 public class HistoryService : IHistoryService
 {
-    public ObservableCollection<HistoryEntry> HistoryEntries { get; set; } = new();
+    public ObservableCollection<HistoryEntry> HistoryEntries { get; private set; } = new();
 
-    private readonly string _fileName = "history.json";
+    private const string FileName = "history.json";
 
-    private readonly int _numberOfEntriesLimit = 100;
+    private const int NumberOfEntriesLimit = 100;
 
     public HistoryService()
     {
-        if (!File.Exists(_fileName))
+        if (!File.Exists(FileName))
         {
-            File.Create(_fileName);
+            File.Create(FileName);
         }
         else
         {
@@ -26,7 +26,7 @@ public class HistoryService : IHistoryService
 
     private void LoadEntriesFromHistory()
     {
-        var json = File.ReadAllText(_fileName);
+        var json = File.ReadAllText(FileName);
         if (!string.IsNullOrWhiteSpace(json))
         {
             HistoryEntries = JsonSerializer.Deserialize<ObservableCollection<HistoryEntry>>(json)!;
@@ -35,19 +35,19 @@ public class HistoryService : IHistoryService
 
     public void SaveEntryToHistory(HistoryEntry historyEntry)
     {
-        if (HistoryEntries.Count >= _numberOfEntriesLimit)
+        if (HistoryEntries.Count >= NumberOfEntriesLimit)
         {
             HistoryEntries.Remove(HistoryEntries.Last());
         }
 
         HistoryEntries.Insert(0, historyEntry);
         var json = JsonSerializer.Serialize(HistoryEntries);
-        File.WriteAllText(_fileName, json);
+        File.WriteAllText(FileName, json);
     }
 
     public void ClearHistory()
     {
         HistoryEntries.Clear();
-        File.WriteAllText(_fileName, string.Empty);
+        File.WriteAllText(FileName, string.Empty);
     }
 }
