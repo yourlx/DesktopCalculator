@@ -151,6 +151,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (!IsExpressionCorrect) return;
         if (!IsGraphSelected && IsExpressionWithVariable && Variable is null) return;
+        if (!IsExpressionWithVariable && Variable is not null) Variable = null;
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();

@@ -35,6 +35,13 @@ public class HistoryService : IHistoryService
 
     public void SaveEntryToHistory(HistoryEntry historyEntry)
     {
+        if (HistoryEntries.Count > 0)
+        {
+            var firstEntry = HistoryEntries.First();
+            if (firstEntry.Expression == historyEntry.Expression &&
+                firstEntry.Variable == historyEntry.Variable) return;
+        }
+
         if (HistoryEntries.Count >= NumberOfEntriesLimit)
         {
             HistoryEntries.Remove(HistoryEntries.Last());
