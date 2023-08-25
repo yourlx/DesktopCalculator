@@ -79,6 +79,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly MathCalculatorWrapper _calculator = new();
 
+    private bool _saveToHistory = true;
+
     public MainWindowViewModel()
     {
         PropertyChanged += OnPropertyChangedEventHandler;
@@ -88,6 +90,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
         {
+            _saveToHistory = false;
             Calculate();
         }
     }
@@ -121,10 +124,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (value.GraphVisibleArea != null)
         {
+            _saveToHistory = false;
             XMin = value.GraphVisibleArea.XMin;
             XMax = value.GraphVisibleArea.XMax;
             YMin = value.GraphVisibleArea.YMin;
             YMax = value.GraphVisibleArea.YMax;
+            Calculate();
         }
     }
 
@@ -155,6 +160,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
+
+        _saveToHistory = true;
     }
 
     #endregion
@@ -201,12 +208,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
         Series[0].Values = values;
 
-        var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
+        if (_saveToHistory)
+        {
+            var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
 
-        var historyEntry = new HistoryEntry(expression: Expression,
-            graphVisibleArea: graphVisibleArea);
+            var historyEntry = new HistoryEntry(expression: Expression,
+                graphVisibleArea: graphVisibleArea);
 
-        HistoryService.SaveEntryToHistory(historyEntry);
+            HistoryService.SaveEntryToHistory(historyEntry);
+        }
     }
 
     #endregion
