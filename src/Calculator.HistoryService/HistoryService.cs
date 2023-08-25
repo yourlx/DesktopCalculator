@@ -10,6 +10,8 @@ public class HistoryService : IHistoryService
 
     private readonly string _fileName = "history.json";
 
+    private readonly int _numberOfEntriesLimit = 100;
+
     public HistoryService()
     {
         if (!File.Exists(_fileName))
@@ -33,6 +35,11 @@ public class HistoryService : IHistoryService
 
     public void SaveEntryToHistory(HistoryEntry historyEntry)
     {
+        if (HistoryEntries.Count >= _numberOfEntriesLimit)
+        {
+            HistoryEntries.Remove(HistoryEntries.Last());
+        }
+
         HistoryEntries.Insert(0, historyEntry);
         var json = JsonSerializer.Serialize(HistoryEntries);
         File.WriteAllText(_fileName, json);
