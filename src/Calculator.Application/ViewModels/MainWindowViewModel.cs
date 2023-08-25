@@ -58,7 +58,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private double? _yMax = 1;
 
     [ObservableProperty]
-    private double? _variable = 0;
+    private double? _variable = null;
 
     [ObservableProperty]
     private bool _isExpressionWithVariable = false;
@@ -68,6 +68,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private IHistoryService _historyService = new HistoryService.HistoryService();
+
+    [ObservableProperty]
+    private HistoryEntry? _selectedHistoryEntry;
+
+    [ObservableProperty]
+    private int _currentTabIndex = 1;
 
     #endregion
 
@@ -100,6 +106,34 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             IsExpressionWithVariable = false;
+            Variable = null;
+        }
+    }
+
+    partial void OnSelectedHistoryEntryChanged(HistoryEntry? value)
+    {
+        if (value != null)
+        {
+            SelectedHistoryEntry = null;
+            Expression = value.Expression;
+            Variable = value.Variable;
+            if (value.GraphVisibleArea != null)
+            {
+                XMin = value.GraphVisibleArea.XMin;
+                XMax = value.GraphVisibleArea.XMax;
+                YMin = value.GraphVisibleArea.YMin;
+                YMax = value.GraphVisibleArea.YMax;
+            }
+
+            if (value.Answer != null)
+            {
+                CurrentTabIndex = 1;
+            }
+            else
+            {
+                CurrentTabIndex = 2;
+                Calculate();
+            }
         }
     }
 
@@ -124,14 +158,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void Calculate()
     {
-        if (!IsExpressionCorrect) return;
-
-        var historyEntry = new HistoryEntry(Expression);
-        if (!(HistoryService.HistoryEntries.Count > 0 &&
-              HistoryService.HistoryEntries.First().Expression == Expression))
-        {
-            HistoryService.SaveEntryToHistory(historyEntry);
-        }
+        if (!IsExpressionCorrect || (!IsGraphSelected && IsExpressionWithVariable && Variable is null)) return;
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
@@ -143,7 +170,18 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateExpression()
     {
-        Expression = _calculator.Calculate(Variable!.Value).ToString("0.#######", CultureInfo.InvariantCulture);
+        var expression = Expression;
+        var answer = _calculator.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
+        Expression = answer;
+
+        var historyEntry = new HistoryEntry(expression: expression,
+            variable: Variable,
+            answer: answer);
+        if (!(HistoryService.HistoryEntries.Count > 0 &&
+              HistoryService.HistoryEntries.First().Expression == Expression))
+        {
+            HistoryService.SaveEntryToHistory(historyEntry);
+        }
     }
 
     #endregion
@@ -172,6 +210,16 @@ public partial class MainWindowViewModel : ViewModelBase
         YAxes[0].MaxLimit = YMax;
 
         Series[0].Values = values;
+
+        var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
+
+        var historyEntry = new HistoryEntry(expression: Expression,
+            graphVisibleArea: graphVisibleArea);
+        if (!(HistoryService.HistoryEntries.Count > 0 &&
+              HistoryService.HistoryEntries.First().Expression == Expression))
+        {
+            HistoryService.SaveEntryToHistory(historyEntry);
+        }
     }
 
     #endregion
