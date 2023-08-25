@@ -112,28 +112,19 @@ public partial class MainWindowViewModel : ViewModelBase
 
     partial void OnSelectedHistoryEntryChanged(HistoryEntry? value)
     {
-        if (value != null)
-        {
-            SelectedHistoryEntry = null;
-            Expression = value.Expression;
-            Variable = value.Variable;
-            if (value.GraphVisibleArea != null)
-            {
-                XMin = value.GraphVisibleArea.XMin;
-                XMax = value.GraphVisibleArea.XMax;
-                YMin = value.GraphVisibleArea.YMin;
-                YMax = value.GraphVisibleArea.YMax;
-            }
+        if (value == null) return;
 
-            if (value.Answer != null)
-            {
-                CurrentTabIndex = 1;
-            }
-            else
-            {
-                CurrentTabIndex = 2;
-                Calculate();
-            }
+        SelectedHistoryEntry = null;
+        Expression = value.Expression;
+        Variable = value.Variable;
+        CurrentTabIndex = value.Answer != null ? 1 : 2;
+
+        if (value.GraphVisibleArea != null)
+        {
+            XMin = value.GraphVisibleArea.XMin;
+            XMax = value.GraphVisibleArea.XMax;
+            YMin = value.GraphVisibleArea.YMin;
+            YMax = value.GraphVisibleArea.YMax;
         }
     }
 
@@ -158,7 +149,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void Calculate()
     {
-        if (!IsExpressionCorrect || (!IsGraphSelected && IsExpressionWithVariable && Variable is null)) return;
+        if (!IsExpressionCorrect) return;
+        if (!IsGraphSelected && IsExpressionWithVariable && Variable is null) return;
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
@@ -177,11 +169,8 @@ public partial class MainWindowViewModel : ViewModelBase
         var historyEntry = new HistoryEntry(expression: expression,
             variable: Variable,
             answer: answer);
-        if (!(HistoryService.HistoryEntries.Count > 0 &&
-              HistoryService.HistoryEntries.First().Expression == Expression))
-        {
-            HistoryService.SaveEntryToHistory(historyEntry);
-        }
+
+        HistoryService.SaveEntryToHistory(historyEntry);
     }
 
     #endregion
@@ -215,11 +204,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var historyEntry = new HistoryEntry(expression: Expression,
             graphVisibleArea: graphVisibleArea);
-        if (!(HistoryService.HistoryEntries.Count > 0 &&
-              HistoryService.HistoryEntries.First().Expression == Expression))
-        {
-            HistoryService.SaveEntryToHistory(historyEntry);
-        }
+
+        HistoryService.SaveEntryToHistory(historyEntry);
     }
 
     #endregion
