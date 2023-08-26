@@ -52,4 +52,27 @@ public class MathCalculatorWrapperTests
     {
         Assert.That(_calculator.CheckValid(expression), Is.False);
     }
+
+    [Theory]
+    [TestCase("0", null, 0)]
+    [TestCase("x", 0, 0)]
+    [TestCase("(x^2+tan(x)+15)^(1/3)", 5, 3.3207594005386381)]
+    [TestCase("2^3^2", null, 512)]
+    [TestCase("sqrt(25)", null, 5)]
+    [TestCase("sin(asin(x))", 1, 1)]
+    [TestCase("3+4*2/(1-5)^2", null, 3.5)]
+    [TestCase("2*(15+x-3*cos(15-6)+5-9-13.7334+2^3^2)/1024", 0, 0.99999998200323048)]
+    [TestCase("-3^2", null, -9)]
+    [TestCase("1e+6-9", null, 999991)]
+    [TestCase("100.235+x-(x+10)", null, 90.2350)]
+    [TestCase("-(3)*(-x-(7*(-(-(-(-(-7)))))))", 6, -129)]
+    [TestCase("2.5+2.45", null, 4.95)]
+    [TestCase("-0.910*3", null, -2.73)]
+    [TestCase("5mod4", null, 1)]
+    public void Calculate_Expression_Result(string expression, double? variable, double result)
+    {
+        Assert.That(_calculator.CheckValid(expression), Is.True);
+        _calculator.ConvertToPolish();
+        Assert.That(_calculator.Calculate(variable ?? 0), Is.EqualTo(result));
+    }
 }
