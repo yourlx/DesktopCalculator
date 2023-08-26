@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using Calculator.Core.Math;
+using Calculator.HistoryService;
+using Calculator.HistoryService.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -55,7 +58,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private double? _yMax = 1;
 
     [ObservableProperty]
-    private double? _variable = 0;
+    private double? _variable = null;
 
     [ObservableProperty]
     private bool _isExpressionWithVariable = false;
@@ -63,9 +66,20 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
+    [ObservableProperty]
+    private IHistoryService _historyService = new HistoryService.HistoryService();
+
+    [ObservableProperty]
+    private HistoryEntry? _selectedHistoryEntry;
+
+    [ObservableProperty]
+    private int _currentTabIndex = 1;
+
     #endregion
 
     private readonly MathCalculatorWrapper _calculator = new();
+
+    private bool _saveToHistory = true;
 
     public MainWindowViewModel()
     {
@@ -74,8 +88,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OnPropertyChangedEventHandler(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
+        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax)
+            && XMin != null && XMax != null && YMin != null && YMax != null)
         {
+            _saveToHistory = false;
             Calculate();
         }
     }
@@ -90,6 +106,31 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             IsExpressionWithVariable = value.Contains('x');
             _calculator.ConvertToPolish();
+        }
+        else
+        {
+            IsExpressionWithVariable = false;
+            Variable = null;
+        }
+    }
+
+    partial void OnSelectedHistoryEntryChanged(HistoryEntry? value)
+    {
+        if (value == null) return;
+
+        SelectedHistoryEntry = null;
+        Expression = value.Expression;
+        Variable = value.Variable;
+        CurrentTabIndex = value.Answer != null ? 1 : 2;
+
+        if (value.GraphVisibleArea != null)
+        {
+            _saveToHistory = false;
+            XMin = value.GraphVisibleArea.XMin;
+            XMax = value.GraphVisibleArea.XMax;
+            YMin = value.GraphVisibleArea.YMin;
+            YMax = value.GraphVisibleArea.YMax;
+            Calculate();
         }
     }
 
@@ -115,9 +156,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public void Calculate()
     {
         if (!IsExpressionCorrect) return;
+        if (!IsGraphSelected && IsExpressionWithVariable && Variable is null) return;
+        if (!IsExpressionWithVariable && Variable is not null) Variable = null;
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
+
+        _saveToHistory = true;
     }
 
     #endregion
@@ -126,7 +171,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateExpression()
     {
-        Expression = _calculator.Calculate(Variable!.Value).ToString("0.#######", CultureInfo.InvariantCulture);
+        var expression = Expression;
+        var answer = _calculator.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
+        Expression = answer;
+
+        var historyEntry = new HistoryEntry(expression: expression,
+            variable: Variable,
+            answer: answer);
+
+        HistoryService.SaveEntryToHistory(historyEntry);
     }
 
     #endregion
@@ -155,6 +208,16 @@ public partial class MainWindowViewModel : ViewModelBase
         YAxes[0].MaxLimit = YMax;
 
         Series[0].Values = values;
+
+        if (_saveToHistory)
+        {
+            var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
+
+            var historyEntry = new HistoryEntry(expression: Expression,
+                graphVisibleArea: graphVisibleArea);
+
+            HistoryService.SaveEntryToHistory(historyEntry);
+        }
     }
 
     #endregion

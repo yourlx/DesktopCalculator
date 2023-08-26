@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Calculator.Application.ViewModels"
+        xmlns:converters="using:Calculator.Application.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
@@ -9,13 +10,19 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/calculator.ico"
         Title="Calculator by yourlx"
-        MaxWidth="600"
-        MaxHeight="530"
-        CanResize="False">
+        MinWidth="600"
+        MinHeight="530"
+        Width="600"
+        Height="530"
+        CanResize="True">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
+
+    <Window.Resources>
+        <converters:NullableToBoolConverter x:Key="NullableToBoolConverter"></converters:NullableToBoolConverter>
+    </Window.Resources>
 
     <!-- TODO: refactor axaml file, maybe move something to control -->
 
@@ -35,18 +42,18 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="TextWrapping" Value="NoWrap" />
             <Setter Property="MaxLength" Value="{Binding MaxExpressionLength}" />
-            <Setter Property="FontSize" Value="15" />
             <Setter Property="Text" Value="{Binding Expression}" />
             <Setter Property="Margin" Value="0 0" />
             <Setter Property="CaretIndex" Value="{Binding Expression.Length}" />
             <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="BorderThickness" Value="0"></Setter>
         </Style>
     </Window.Styles>
 
     <DockPanel Margin="5">
         <!-- MainContent -->
-        <TabControl DockPanel.Dock="Top" SelectedIndex="1">
+        <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding CurrentTabIndex}">
             <!-- Help -->
             <TabItem Header="Help">
                 Text
@@ -54,18 +61,19 @@
             <!-- Default -->
             <TabItem Header="Math">
                 <DockPanel>
-                    <DockPanel DockPanel.Dock="Top">
+                    <DockPanel DockPanel.Dock="Top" MinHeight="65" Height="65" MaxHeight="65">
                         <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
                         <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
-                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
+                        <NumericUpDown DockPanel.Dock="Bottom" ShowButtonSpinner="False"
                                        Value="{Binding Variable}"
-                                       IsEnabled="{Binding IsExpressionWithVariable}"
                                        BorderThickness="0" HorizontalContentAlignment="Right"
                                        FormatString="0.#######"
-                                       NumberFormat="{Binding NumberStyle}" />
+                                       NumberFormat="{Binding NumberStyle}"
+                                       FontSize="15"
+                                       IsVisible="{Binding IsExpressionWithVariable}" />
+                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" VerticalContentAlignment="Center" />
                     </DockPanel>
                     <!-- Keyboard -->
                     <Grid DockPanel.Dock="Top" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *, *, *, *, *">
@@ -216,22 +224,36 @@
             </TabItem>
             <!-- History -->
             <TabItem Header="History">
-                <DockPanel>
-                    <DockPanel DockPanel.Dock="Top">
-                        <Border DockPanel.Dock="Left" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Right" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Top" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1"></Border>
-                        <TextBox DockPanel.Dock="Top" Classes="ExpressionBox" />
-                        <NumericUpDown DockPanel.Dock="Top" ShowButtonSpinner="False"
-                                       Value="{Binding Variable}"
-                                       IsEnabled="{Binding IsExpressionWithVariable}"
-                                       BorderThickness="0" HorizontalContentAlignment="Right"
-                                       FormatString="0.#######"
-                                       NumberFormat="{Binding NumberStyle}" />
-                    </DockPanel>
-                    <ListBox DockPanel.Dock="Top" Margin="0 5">
-                        <ListBoxItem>Text</ListBoxItem>
+                <DockPanel Margin="5">
+                    <Button DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            Command="{Binding HistoryService.ClearHistory}"
+                            Margin="0 5 0 0">
+                        Clear history
+                    </Button>
+                    <ListBox FlowDirection="LeftToRight" ItemsSource="{Binding HistoryService.HistoryEntries}"
+                             SelectedItem="{Binding SelectedHistoryEntry}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Label Content="Math"
+                                           IsVisible="{Binding Answer, Converter={StaticResource NullableToBoolConverter}}" />
+                                    <Label Content="Graph"
+                                           IsVisible="{Binding GraphVisibleArea, Converter={StaticResource NullableToBoolConverter}}" />
+                                    <Label Content="{Binding Expression, StringFormat='\'{0}\''}" />
+                                    <Label Content="{Binding Variable, StringFormat='x := \'{0}\''}"
+                                           IsVisible="{Binding Variable, Converter={StaticResource NullableToBoolConverter}}" />
+                                    <Label Content="{Binding Answer, StringFormat='= \'{0}\''}"
+                                           IsVisible="{Binding Answer, Converter={StaticResource NullableToBoolConverter}}" />
+                                    <StackPanel Orientation="Horizontal"
+                                                IsVisible="{Binding GraphVisibleArea, Converter={StaticResource NullableToBoolConverter}}">
+                                        <Label Content="{Binding GraphVisibleArea.XMin, StringFormat='Xmin = {0},'}" />
+                                        <Label Content="{Binding GraphVisibleArea.XMax, StringFormat='Xmax = {0},'}" />
+                                        <Label Content="{Binding GraphVisibleArea.YMin, StringFormat='Ymin = {0},'}" />
+                                        <Label Content="{Binding GraphVisibleArea.YMax, StringFormat='Ymax = {0}.'}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </DockPanel>
             </TabItem>

@@ -28,5 +28,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Calculator.Core.Math\Calculator.Core.Math.csproj" />
+      <ProjectReference Include="..\Calculator.HistoryService\Calculator.HistoryService.csproj" />
     </ItemGroup>
 </Project>
