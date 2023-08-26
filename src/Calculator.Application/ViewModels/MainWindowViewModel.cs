@@ -74,7 +74,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OnPropertyChangedEventHandler(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
+        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax)
+            && XMin != null && XMax != null && YMin != null && YMax != null)
         {
             Calculate();
         }
