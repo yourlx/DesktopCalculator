@@ -69,7 +69,7 @@ public class MathCalculatorWrapperTests
     [TestCase("2.5+2.45", null, 4.95)]
     [TestCase("-0.910*3", null, -2.73)]
     [TestCase("5mod4", null, 1)]
-    public void Calculate_Expression_Result(string expression, double? variable, double result)
+    public void Calculate_ExpressionAndVariable_Result(string expression, double? variable, double result)
     {
         Assert.That(_calculator.CheckValid(expression), Is.True);
         _calculator.ConvertToPolish();
