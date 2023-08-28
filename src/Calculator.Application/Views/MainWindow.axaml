@@ -44,7 +44,6 @@
             <Setter Property="MaxLength" Value="{Binding MaxExpressionLength}" />
             <Setter Property="Text" Value="{Binding Expression}" />
             <Setter Property="Margin" Value="0 0" />
-            <Setter Property="CaretIndex" Value="{Binding Expression.Length}" />
             <Setter Property="CornerRadius" Value="0" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="BorderThickness" Value="0"></Setter>
