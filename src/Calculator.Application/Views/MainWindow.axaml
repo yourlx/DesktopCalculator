@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        xmlns:markdown="using:Markdown.Avalonia"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="530"
         x:Class="Calculator.Application.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -56,7 +57,7 @@
         <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding CurrentTabIndex}">
             <!-- Help -->
             <TabItem Header="Help">
-                Text
+                <markdown:MarkdownScrollViewer Source="avares://Calculator.Application/Assets/Help/Help.md"  />
             </TabItem>
             <!-- Default -->
             <TabItem Header="Math">
