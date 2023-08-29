@@ -23,6 +23,7 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-beta.911" />
+        <PackageReference Include="Markdown.Avalonia" Version="11.0.1" />
     </ItemGroup>
 
 
