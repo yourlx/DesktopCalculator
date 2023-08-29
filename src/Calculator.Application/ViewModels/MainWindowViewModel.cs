@@ -188,7 +188,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateGraph()
     {
-        const int numberOfPoints = 500;
+        const int numberOfPoints = 2500;
         var step = (XMax!.Value - XMin!.Value) / numberOfPoints;
 
         var values = new ObservablePoint[numberOfPoints];
@@ -197,7 +197,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var x = XMin.Value + step * i;
             double? y = _calculator.Calculate(x);
-            if (y < YMin || y > YMax) y = null;
+            if (y < YMin * 3 || y > YMax * 3) y = null;
             values[i] = new ObservablePoint(x, y);
         }
 
