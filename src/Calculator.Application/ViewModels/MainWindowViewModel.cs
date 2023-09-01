@@ -88,8 +88,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OnPropertyChangedEventHandler(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax)
-            && XMin != null && XMax != null && YMin != null && YMax != null)
+        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
         {
             _saveToHistory = false;
             Calculate();
@@ -158,6 +157,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (!IsExpressionCorrect) return;
         if (!IsGraphSelected && IsExpressionWithVariable && Variable is null) return;
         if (!IsExpressionWithVariable && Variable is not null) Variable = null;
+        if (XMin == null || XMax == null || YMin == null || YMax == null) return;
 
         if (IsGraphSelected) CalculateGraph();
         else CalculateExpression();
