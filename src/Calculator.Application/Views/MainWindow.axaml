@@ -1,7 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Calculator.Application.ViewModels"
-        xmlns:converters="using:Calculator.Application.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
@@ -20,10 +19,6 @@
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-
-    <Window.Resources>
-        <converters:NullableToBoolConverter x:Key="NullableToBoolConverter"></converters:NullableToBoolConverter>
-    </Window.Resources>
 
     <!-- TODO: refactor axaml file, maybe move something to control -->
 
@@ -56,7 +51,7 @@
         <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding CurrentTabIndex}">
             <!-- Help -->
             <TabItem Header="Help">
-                <markdown:MarkdownScrollViewer Source="avares://Calculator.Application/Assets/Help/Help.md"  />
+                <markdown:MarkdownScrollViewer Source="avares://Calculator.Application/Assets/Help/Help.md" />
             </TabItem>
             <!-- Default -->
             <TabItem Header="Math">
@@ -235,17 +230,14 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <Label Content="Math"
-                                           IsVisible="{Binding Answer, Converter={StaticResource NullableToBoolConverter}}" />
-                                    <Label Content="Graph"
-                                           IsVisible="{Binding GraphVisibleArea, Converter={StaticResource NullableToBoolConverter}}" />
+                                    <Label Content="Math" IsVisible="{Binding !!Answer}" />
+                                    <Label Content="Graph" IsVisible="{Binding !!GraphVisibleArea}" />
                                     <Label Content="{Binding Expression, StringFormat='\'{0}\''}" />
                                     <Label Content="{Binding Variable, StringFormat='x := \'{0}\''}"
-                                           IsVisible="{Binding Variable, Converter={StaticResource NullableToBoolConverter}}" />
+                                           IsVisible="{Binding !!Variable}" />
                                     <Label Content="{Binding Answer, StringFormat='= \'{0}\''}"
-                                           IsVisible="{Binding Answer, Converter={StaticResource NullableToBoolConverter}}" />
-                                    <StackPanel Orientation="Horizontal"
-                                                IsVisible="{Binding GraphVisibleArea, Converter={StaticResource NullableToBoolConverter}}">
+                                           IsVisible="{Binding !!Answer}" />
+                                    <StackPanel Orientation="Horizontal" IsVisible="{Binding !!GraphVisibleArea}">
                                         <Label Content="{Binding GraphVisibleArea.XMin, StringFormat='Xmin = {0},'}" />
                                         <Label Content="{Binding GraphVisibleArea.XMax, StringFormat='Xmax = {0},'}" />
                                         <Label Content="{Binding GraphVisibleArea.YMin, StringFormat='Ymin = {0},'}" />
