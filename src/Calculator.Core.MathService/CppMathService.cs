@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Calculator.Core.Math;
+namespace Calculator.Core.MathService;
 
 public class CppMathService : IDisposable, IMathService
 {

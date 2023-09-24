@@ -1,4 +1,4 @@
-﻿namespace Calculator.Core.Math;
+﻿namespace Calculator.Core.MathService;
 
 public interface IMathService
 {

@@ -1,4 +1,4 @@
-using Calculator.Core.Math;
+using Calculator.Core.MathService;
 
 // todo: fix tests
 

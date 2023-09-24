@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using Calculator.Core.Math;
+using Calculator.Core.MathService;
 using Calculator.HistoryService;
 using Calculator.HistoryService.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
