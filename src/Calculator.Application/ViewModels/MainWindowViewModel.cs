@@ -76,15 +76,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     #endregion
 
-    private readonly IMathService _calculator;
+    private readonly IMathService _mathService;
 
     private bool _saveToHistory = true;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IMathService mathService, IHistoryService historyService)
     {
-        // todo: DI
-        _calculator = new CppMathService();
-        _historyService = new JsonHistoryService();
+        _mathService = mathService;
+        _historyService = historyService;
         PropertyChanged += OnPropertyChangedEventHandler;
     }
 
@@ -102,8 +101,8 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
-        _calculator.SetExpression(Expression);
-        IsExpressionCorrect = _calculator.CheckExpressionValid();
+        _mathService.SetExpression(Expression);
+        IsExpressionCorrect = _mathService.CheckExpressionValid();
         if (IsExpressionCorrect)
         {
             IsExpressionWithVariable = value.Contains('x');
@@ -174,7 +173,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private void CalculateExpression()
     {
         var expression = Expression;
-        var answer = _calculator.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
+        var answer = _mathService.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
         Expression = answer;
 
         var historyEntry = new HistoryEntry(expression: expression,
@@ -198,7 +197,7 @@ public partial class MainWindowViewModel : ViewModelBase
         for (var i = 0; i < numberOfPoints; ++i)
         {
             var x = XMin.Value + step * i;
-            double? y = _calculator.Calculate(x);
+            double? y = _mathService.Calculate(x);
             if (y < YMin * 3 || y > YMax * 3) y = null;
             values[i] = new ObservablePoint(x, y);
         }
