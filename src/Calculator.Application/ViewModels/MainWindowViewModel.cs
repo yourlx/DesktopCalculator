@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using Calculator.Core.Math;
+using Calculator.Core.MathService;
 using Calculator.HistoryService;
 using Calculator.HistoryService.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -67,7 +66,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
     [ObservableProperty]
-    private IHistoryService _historyService = new HistoryService.HistoryService();
+    private IHistoryService _historyService;
 
     [ObservableProperty]
     private HistoryEntry? _selectedHistoryEntry;
@@ -77,12 +76,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     #endregion
 
-    private readonly MathCalculatorWrapper _calculator = new();
+    private readonly IMathService _mathService;
 
     private bool _saveToHistory = true;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IMathService mathService, IHistoryService historyService)
     {
+        _mathService = mathService;
+        _historyService = historyService;
         PropertyChanged += OnPropertyChangedEventHandler;
     }
 
@@ -100,11 +101,11 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
-        IsExpressionCorrect = _calculator.CheckValid(value);
+        _mathService.SetExpression(Expression);
+        IsExpressionCorrect = _mathService.CheckExpressionValid();
         if (IsExpressionCorrect)
         {
             IsExpressionWithVariable = value.Contains('x');
-            _calculator.ConvertToPolish();
         }
         else
         {
@@ -172,7 +173,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private void CalculateExpression()
     {
         var expression = Expression;
-        var answer = _calculator.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
+        var answer = _mathService.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
         Expression = answer;
 
         var historyEntry = new HistoryEntry(expression: expression,
@@ -196,7 +197,7 @@ public partial class MainWindowViewModel : ViewModelBase
         for (var i = 0; i < numberOfPoints; ++i)
         {
             var x = XMin.Value + step * i;
-            double? y = _calculator.Calculate(x);
+            double? y = _mathService.Calculate(x);
             if (y < YMin * 3 || y > YMax * 3) y = null;
             values[i] = new ObservablePoint(x, y);
         }

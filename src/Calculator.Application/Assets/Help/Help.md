@@ -21,7 +21,7 @@ Expression with variable fields and keyboard.
 
 You can use your real keyboard to add tokens to expression or virtual keyboard. 
 
-![Graph tab](MathTab1.png)
+![Graph tab](Images/MathTab1.png)
 
 Variable field only pop-up when you have CORRECT expression with *x*.
 
@@ -59,7 +59,7 @@ You can build graph of any function `y = f(x)`.
 
 Example of `sin(x)` plot with x = [-5; 5] and y [-3;3] below:
 
-![Graph tab](GraphTab1.png)
+![Graph tab](Images/GraphTab1.png)
 
 ## History tab
 
@@ -69,4 +69,4 @@ Max buffer limited to 100 records.
 
 You can click to any record and it will redirect you to corresponding tab. Also copying all values.
 
-![History tab](HistoryTab1.png)
+![History tab](Images/HistoryTab1.png)

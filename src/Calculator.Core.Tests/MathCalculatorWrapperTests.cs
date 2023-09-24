@@ -1,10 +1,12 @@
-using Calculator.Core.Math;
+using Calculator.Core.MathService;
+
+// todo: fix tests
 
 namespace Calculator.Core.Tests;
 
 public class MathCalculatorWrapperTests
 {
-    private readonly MathCalculatorWrapper _calculator = new();
+    private readonly CppMathService _calculator = new();
 
     [Theory]
     [TestCase("-16-3+9*cos(15mod9)+(-9-2)")]

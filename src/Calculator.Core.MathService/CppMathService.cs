@@ -1,12 +1,14 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Calculator.Core.Math;
+namespace Calculator.Core.MathService;
 
-public class MathCalculatorWrapper : IDisposable
+public class CppMathService : IDisposable, IMathService
 {
     private readonly IntPtr _calculator = CreateInstance();
 
-    ~MathCalculatorWrapper()
+    private string _expression = string.Empty;
+
+    ~CppMathService()
     {
         ReleaseUnmanagedResources();
     }
@@ -22,14 +24,16 @@ public class MathCalculatorWrapper : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public bool CheckValid(string expression)
+    public void SetExpression(string expression)
     {
-        return CheckValid(_calculator, expression);
+        _expression = expression;
     }
 
-    public void ConvertToPolish()
+    public bool CheckExpressionValid()
     {
+        var result = CheckValid(_calculator, _expression);
         ConvertToPolish(_calculator);
+        return result;
     }
 
     public double Calculate(double x = 0)
