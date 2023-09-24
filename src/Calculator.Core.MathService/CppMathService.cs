@@ -5,7 +5,7 @@ namespace Calculator.Core.MathService;
 public class CppMathService : IDisposable, IMathService
 {
     private readonly IntPtr _calculator = CreateInstance();
-    
+
     private string _expression = string.Empty;
 
     ~CppMathService()

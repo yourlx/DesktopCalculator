@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using Calculator.Core.MathService;
 using Calculator.HistoryService;
 using Calculator.HistoryService.Models;
@@ -67,7 +66,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
     [ObservableProperty]
-    private IHistoryService _historyService = new HistoryService.JsonHistoryService();
+    private IHistoryService _historyService;
 
     [ObservableProperty]
     private HistoryEntry? _selectedHistoryEntry;
@@ -85,6 +84,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         // todo: DI
         _calculator = new CppMathService();
+        _historyService = new JsonHistoryService();
         PropertyChanged += OnPropertyChangedEventHandler;
     }
 

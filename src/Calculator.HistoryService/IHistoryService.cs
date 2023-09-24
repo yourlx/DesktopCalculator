@@ -5,9 +5,9 @@ namespace Calculator.HistoryService;
 
 public interface IHistoryService
 {
-    public ObservableCollection<HistoryEntry> HistoryEntries { get; }
-    
-    public void SaveEntryToHistory(HistoryEntry historyService);
+    ObservableCollection<HistoryEntry> HistoryEntries { get; }
 
-    public void ClearHistory();
+    void SaveEntryToHistory(HistoryEntry historyService);
+
+    void ClearHistory();
 }
