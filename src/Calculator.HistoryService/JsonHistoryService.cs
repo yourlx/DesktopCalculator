@@ -33,7 +33,7 @@ public class JsonHistoryService : IHistoryService
         }
     }
 
-    public void SaveEntryToHistory(HistoryEntry historyEntry)
+    public void SaveToHistory(HistoryEntry historyEntry)
     {
         if (HistoryEntries.Count > 0)
         {

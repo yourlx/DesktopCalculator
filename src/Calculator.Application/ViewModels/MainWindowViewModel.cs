@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Globalization;
 using Calculator.Core.MathService;
 using Calculator.HistoryService;
@@ -13,10 +12,28 @@ namespace Calculator.Application.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    #region Observable properties
+    [ObservableProperty]
+    private IHistoryService _historyService;
+
+    private readonly IMathService _mathService;
+
+    [ObservableProperty]
+    private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
+
+    [ObservableProperty]
+    private int _maxExpressionLength = 255;
 
     [ObservableProperty]
     private string _expression = string.Empty;
+
+    [ObservableProperty]
+    private bool _isExpressionCorrect = false;
+
+    [ObservableProperty]
+    private double? _variable = null;
+
+    [ObservableProperty]
+    private bool _isExpressionWithVariable = false;
 
     [ObservableProperty]
     private bool _isGraphSelected = false;
@@ -39,12 +56,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private ObservableCollection<Axis> _yAxes = new(new[] { new Axis() });
 
     [ObservableProperty]
-    private bool _isExpressionCorrect = false;
-
-    [ObservableProperty]
-    private int _maxExpressionLength = 255;
-
-    [ObservableProperty]
     private double? _xMin = -5;
 
     [ObservableProperty]
@@ -57,66 +68,38 @@ public partial class MainWindowViewModel : ViewModelBase
     private double? _yMax = 1;
 
     [ObservableProperty]
-    private double? _variable = null;
-
-    [ObservableProperty]
-    private bool _isExpressionWithVariable = false;
-
-    [ObservableProperty]
-    private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
-
-    [ObservableProperty]
-    private IHistoryService _historyService;
-
-    [ObservableProperty]
     private HistoryEntry? _selectedHistoryEntry;
 
     [ObservableProperty]
     private int _currentTabIndex = 1;
 
-    #endregion
-
-    private readonly IMathService _mathService;
-
     private bool _saveToHistory = true;
 
-    public MainWindowViewModel(IMathService mathService, IHistoryService historyService)
+    public MainWindowViewModel(
+        IMathService mathService,
+        IHistoryService historyService
+    )
     {
         _mathService = mathService;
         _historyService = historyService;
-        PropertyChanged += OnPropertyChangedEventHandler;
     }
-
-    private void OnPropertyChangedEventHandler(object? sender, PropertyChangedEventArgs args)
-    {
-        if (args.PropertyName is nameof(XMin) or nameof(XMax) or nameof(YMin) or nameof(YMax))
-        {
-            _saveToHistory = false;
-            Calculate();
-        }
-    }
-
-    #region Events
 
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
+
         _mathService.SetExpression(Expression);
+
         IsExpressionCorrect = _mathService.CheckExpressionValid();
-        if (IsExpressionCorrect)
-        {
-            IsExpressionWithVariable = value.Contains('x');
-        }
-        else
-        {
-            IsExpressionWithVariable = false;
-            Variable = null;
-        }
+        IsExpressionWithVariable = IsExpressionCorrect && value.Contains('x');
     }
 
     partial void OnSelectedHistoryEntryChanged(HistoryEntry? value)
     {
-        if (value == null) return;
+        if (value == null)
+        {
+            return;
+        }
 
         SelectedHistoryEntry = null;
         Expression = value.Expression;
@@ -134,13 +117,12 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    #endregion
-
-    #region Commands
-
     public void AddTokenToExpression(string token)
     {
-        if (Expression.Length + token.Length <= MaxExpressionLength) Expression += token;
+        if (Expression.Length + token.Length <= MaxExpressionLength)
+        {
+            Expression += token;
+        }
     }
 
     public void RemoveLastSymbolFromExpression()
@@ -155,37 +137,69 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void Calculate()
     {
-        if (!IsExpressionCorrect) return;
-        if (!IsGraphSelected && IsExpressionWithVariable && Variable is null) return;
-        if (!IsExpressionWithVariable && Variable is not null) Variable = null;
-        if (XMin == null || XMax == null || YMin == null || YMax == null) return;
+        if (!IsExpressionCorrect)
+        {
+            return;
+        }
 
-        if (IsGraphSelected) CalculateGraph();
-        else CalculateExpression();
+        if (!IsGraphSelected && IsExpressionWithVariable && Variable is null)
+        {
+            return;
+        }
+
+        if (XMin == null || XMax == null || YMin == null || YMax == null)
+        {
+            return;
+        }
+
+        if (!IsExpressionWithVariable && Variable is not null)
+        {
+            Variable = null;
+        }
+
+        var originalExpression = Expression;
+
+        if (IsGraphSelected)
+        {
+            CalculateGraph();
+        }
+        else
+        {
+            CalculateExpression();
+        }
+
+        if (_saveToHistory)
+        {
+            SaveToHistory(originalExpression);
+        }
 
         _saveToHistory = true;
     }
 
-    #endregion
-
-    #region Math
+    private void SaveToHistory(string originalExpression)
+    {
+        if (IsGraphSelected)
+        {
+            var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
+            var historyEntry = new HistoryEntry(
+                expression: originalExpression,
+                graphVisibleArea: graphVisibleArea);
+            HistoryService.SaveToHistory(historyEntry);
+        }
+        else
+        {
+            var historyEntry = new HistoryEntry(
+                expression: originalExpression,
+                variable: Variable,
+                answer: Expression);
+            HistoryService.SaveToHistory(historyEntry);
+        }
+    }
 
     private void CalculateExpression()
     {
-        var expression = Expression;
-        var answer = _mathService.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
-        Expression = answer;
-
-        var historyEntry = new HistoryEntry(expression: expression,
-            variable: Variable,
-            answer: answer);
-
-        HistoryService.SaveEntryToHistory(historyEntry);
+        Expression = _mathService.Calculate(Variable ?? 0).ToString("0.#######", CultureInfo.InvariantCulture);
     }
-
-    #endregion
-
-    #region Graph
 
     private void CalculateGraph()
     {
@@ -198,7 +212,11 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var x = XMin.Value + step * i;
             double? y = _mathService.Calculate(x);
-            if (y < YMin * 3 || y > YMax * 3) y = null;
+            if (y < YMin * 3 || y > YMax * 3)
+            {
+                y = null;
+            }
+
             values[i] = new ObservablePoint(x, y);
         }
 
@@ -209,17 +227,5 @@ public partial class MainWindowViewModel : ViewModelBase
         YAxes[0].MaxLimit = YMax;
 
         Series[0].Values = values;
-
-        if (_saveToHistory)
-        {
-            var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
-
-            var historyEntry = new HistoryEntry(expression: Expression,
-                graphVisibleArea: graphVisibleArea);
-
-            HistoryService.SaveEntryToHistory(historyEntry);
-        }
     }
-
-    #endregion
 }

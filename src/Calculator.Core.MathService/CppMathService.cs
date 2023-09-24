@@ -31,9 +31,14 @@ public class CppMathService : IDisposable, IMathService
 
     public bool CheckExpressionValid()
     {
-        var result = CheckValid(_calculator, _expression);
-        ConvertToPolish(_calculator);
-        return result;
+        var valid = CheckValid(_calculator, _expression);
+
+        if (valid)
+        {
+            ConvertToPolish(_calculator);
+        }
+
+        return valid;
     }
 
     public double Calculate(double x = 0)
