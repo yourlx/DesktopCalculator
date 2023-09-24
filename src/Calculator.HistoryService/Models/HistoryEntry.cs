@@ -1,29 +1,27 @@
-using System.Text.Json.Serialization;
+using Calculator.HistoryService.Models.Enums;
 
 namespace Calculator.HistoryService.Models;
 
 public class HistoryEntry
 {
-    [JsonPropertyName("expression")]
     public string Expression { get; }
 
-    [JsonPropertyName("answer")]
-    public string? Answer { get; }
+    public HistoryEntryType Type { get; }
 
-    [JsonPropertyName("variable")]
-    public double? Variable { get; }
+    public MathEntry? MathEntry { get; }
 
-    [JsonPropertyName("graphVisibleArea")]
-    public GraphVisibleArea? GraphVisibleArea { get; }
+    public GraphEntry? GraphEntry { get; }
 
-    public HistoryEntry(string expression,
-        double? variable = null,
-        string? answer = null,
-        GraphVisibleArea? graphVisibleArea = null)
+    public HistoryEntry(
+        string expression,
+        HistoryEntryType type,
+        MathEntry? mathEntry,
+        GraphEntry? graphEntry
+    )
     {
         Expression = expression;
-        Variable = variable;
-        Answer = answer;
-        GraphVisibleArea = graphVisibleArea;
+        Type = type;
+        MathEntry = mathEntry;
+        GraphEntry = graphEntry;
     }
 }

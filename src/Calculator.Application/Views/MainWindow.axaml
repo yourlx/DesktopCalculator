@@ -230,18 +230,17 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <Label Content="Math" IsVisible="{Binding !!Answer}" />
-                                    <Label Content="Graph" IsVisible="{Binding !!GraphVisibleArea}" />
+                                    <Label Content="{Binding Type}" />
                                     <Label Content="{Binding Expression, StringFormat='\'{0}\''}" />
-                                    <Label Content="{Binding Variable, StringFormat='x := \'{0}\''}"
-                                           IsVisible="{Binding !!Variable}" />
-                                    <Label Content="{Binding Answer, StringFormat='= \'{0}\''}"
-                                           IsVisible="{Binding !!Answer}" />
-                                    <StackPanel Orientation="Horizontal" IsVisible="{Binding !!GraphVisibleArea}">
-                                        <Label Content="{Binding GraphVisibleArea.XMin, StringFormat='Xmin = {0},'}" />
-                                        <Label Content="{Binding GraphVisibleArea.XMax, StringFormat='Xmax = {0},'}" />
-                                        <Label Content="{Binding GraphVisibleArea.YMin, StringFormat='Ymin = {0},'}" />
-                                        <Label Content="{Binding GraphVisibleArea.YMax, StringFormat='Ymax = {0}.'}" />
+                                    <Label Content="{Binding MathEntry.Variable, StringFormat='x := \'{0}\''}"
+                                           IsVisible="{Binding !!MathEntry.Variable}" />
+                                    <Label Content="{Binding MathEntry.Answer, StringFormat='= \'{0}\''}"
+                                           IsVisible="{Binding !!MathEntry}" />
+                                    <StackPanel Orientation="Horizontal" IsVisible="{Binding !!GraphEntry}">
+                                        <Label Content="{Binding GraphEntry.XMin, StringFormat='Xmin = {0},'}" />
+                                        <Label Content="{Binding GraphEntry.XMax, StringFormat='Xmax = {0},'}" />
+                                        <Label Content="{Binding GraphEntry.YMin, StringFormat='Ymin = {0},'}" />
+                                        <Label Content="{Binding GraphEntry.YMax, StringFormat='Ymax = {0}.'}" />
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
