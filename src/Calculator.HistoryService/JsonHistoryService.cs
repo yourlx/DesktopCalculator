@@ -4,7 +4,7 @@ using Calculator.HistoryService.Models;
 
 namespace Calculator.HistoryService;
 
-public class HistoryService : IHistoryService
+public class JsonHistoryService : IHistoryService
 {
     public ObservableCollection<HistoryEntry> HistoryEntries { get; private set; } = new();
 
@@ -12,7 +12,7 @@ public class HistoryService : IHistoryService
 
     private const int NumberOfEntriesLimit = 100;
 
-    public HistoryService()
+    public JsonHistoryService()
     {
         if (!File.Exists(FileName))
         {

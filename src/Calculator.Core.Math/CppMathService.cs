@@ -2,11 +2,13 @@
 
 namespace Calculator.Core.Math;
 
-public class MathCalculatorWrapper : IDisposable
+public class CppMathService : IDisposable, IMathService
 {
     private readonly IntPtr _calculator = CreateInstance();
+    
+    private string _expression = string.Empty;
 
-    ~MathCalculatorWrapper()
+    ~CppMathService()
     {
         ReleaseUnmanagedResources();
     }
@@ -22,14 +24,16 @@ public class MathCalculatorWrapper : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public bool CheckValid(string expression)
+    public void SetExpression(string expression)
     {
-        return CheckValid(_calculator, expression);
+        _expression = expression;
     }
 
-    public void ConvertToPolish()
+    public bool CheckExpressionValid()
     {
+        var result = CheckValid(_calculator, _expression);
         ConvertToPolish(_calculator);
+        return result;
     }
 
     public double Calculate(double x = 0)

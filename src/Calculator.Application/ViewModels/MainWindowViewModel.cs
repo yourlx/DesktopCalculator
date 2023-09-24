@@ -67,7 +67,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private NumberFormatInfo _numberStyle = NumberFormatInfo.InvariantInfo;
 
     [ObservableProperty]
-    private IHistoryService _historyService = new HistoryService.HistoryService();
+    private IHistoryService _historyService = new HistoryService.JsonHistoryService();
 
     [ObservableProperty]
     private HistoryEntry? _selectedHistoryEntry;
@@ -77,12 +77,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     #endregion
 
-    private readonly MathCalculatorWrapper _calculator = new();
+    private readonly IMathService _calculator;
 
     private bool _saveToHistory = true;
 
     public MainWindowViewModel()
     {
+        // todo: DI
+        _calculator = new CppMathService();
         PropertyChanged += OnPropertyChangedEventHandler;
     }
 
@@ -100,11 +102,11 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnExpressionChanged(string value)
     {
         Expression = value.ToLower();
-        IsExpressionCorrect = _calculator.CheckValid(value);
+        _calculator.SetExpression(Expression);
+        IsExpressionCorrect = _calculator.CheckExpressionValid();
         if (IsExpressionCorrect)
         {
             IsExpressionWithVariable = value.Contains('x');
-            _calculator.ConvertToPolish();
         }
         else
         {
