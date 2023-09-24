@@ -7,7 +7,7 @@ public interface IHistoryService
 {
     ObservableCollection<HistoryEntry> HistoryEntries { get; }
 
-    void SaveEntryToHistory(HistoryEntry historyService);
+    void SaveToHistory(HistoryEntry historyService);
 
     void ClearHistory();
 }
