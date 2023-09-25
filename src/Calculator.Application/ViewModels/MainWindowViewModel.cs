@@ -3,6 +3,7 @@ using System.Globalization;
 using Calculator.Core.MathService;
 using Calculator.HistoryService;
 using Calculator.HistoryService.Models;
+using Calculator.HistoryService.Models.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -103,16 +104,19 @@ public partial class MainWindowViewModel : ViewModelBase
 
         SelectedHistoryEntry = null;
         Expression = value.Expression;
-        Variable = value.Variable;
-        CurrentTabIndex = value.Answer != null ? 1 : 2;
+        CurrentTabIndex = value.Type == HistoryEntryType.Math ? 1 : 2;
 
-        if (value.GraphVisibleArea != null)
+        if (value.Type == HistoryEntryType.Math)
+        {
+            Variable = value.MathEntry!.Variable;
+        }
+        else if (value.Type == HistoryEntryType.Graph)
         {
             _saveToHistory = false;
-            XMin = value.GraphVisibleArea.XMin;
-            XMax = value.GraphVisibleArea.XMax;
-            YMin = value.GraphVisibleArea.YMin;
-            YMax = value.GraphVisibleArea.YMax;
+            XMin = value.GraphEntry!.XMin;
+            XMax = value.GraphEntry!.XMax;
+            YMin = value.GraphEntry!.YMin;
+            YMax = value.GraphEntry!.YMax;
             Calculate();
         }
     }
@@ -178,22 +182,18 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void SaveToHistory(string originalExpression)
     {
-        if (IsGraphSelected)
-        {
-            var graphVisibleArea = new GraphVisibleArea(XMin, XMax, YMin, YMax);
-            var historyEntry = new HistoryEntry(
-                expression: originalExpression,
-                graphVisibleArea: graphVisibleArea);
-            HistoryService.SaveToHistory(historyEntry);
-        }
-        else
-        {
-            var historyEntry = new HistoryEntry(
-                expression: originalExpression,
-                variable: Variable,
-                answer: Expression);
-            HistoryService.SaveToHistory(historyEntry);
-        }
+        var entryType = IsGraphSelected ? HistoryEntryType.Graph : HistoryEntryType.Math;
+
+        var mathEntry = IsGraphSelected ? null : new MathEntry(Expression, Variable);
+        var graphEntry = IsGraphSelected ? new GraphEntry(XMin, XMax, YMin, YMax) : null;
+
+        var historyEntry = new HistoryEntry(
+            expression: originalExpression,
+            entryType,
+            mathEntry,
+            graphEntry);
+
+        HistoryService.SaveToHistory(historyEntry);
     }
 
     private void CalculateExpression()
