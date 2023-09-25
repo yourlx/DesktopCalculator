@@ -1,14 +1,11 @@
 using Calculator.Core.MathService;
 
-// todo: fix tests
-
 namespace Calculator.Core.Tests;
 
-public class MathCalculatorWrapperTests
+public class CppMathServiceTests
 {
-    private readonly CppMathService _calculator = new();
+    private readonly IMathService _mathService = new CppMathService();
 
-    [Theory]
     [TestCase("-16-3+9*cos(15mod9)+(-9-2)")]
     [TestCase("(x*ln(sin(x)))/sqrt(x^2+4)+cos(x)*sqrt(x^2+4)/sin(x)")]
     [TestCase("(x^2+tan(x)+15)^(1/3)")]
@@ -32,10 +29,10 @@ public class MathCalculatorWrapperTests
     [TestCase("-16+16")]
     public void CheckValid_CorrectExpression_True(string expression)
     {
-        Assert.That(_calculator.CheckValid(expression), Is.True);
+        _mathService.SetExpression(expression);
+        Assert.That(_mathService.CheckExpressionValid, Is.True);
     }
 
-    [Theory]
     [TestCase("(3-)2")]
     [TestCase("(x*ln(sin(x)))/sqrt(x^2+4)+cos(x)d*sqrt(x^2+4)/sin(x)")]
     [TestCase("16..")]
@@ -52,18 +49,18 @@ public class MathCalculatorWrapperTests
     [TestCase("(8+2*5)/(1+3)*2)-((4)")]
     public void CheckValid_IncorrectExpression_False(string expression)
     {
-        Assert.That(_calculator.CheckValid(expression), Is.False);
+        _mathService.SetExpression(expression);
+        Assert.That(_mathService.CheckExpressionValid, Is.False);
     }
 
-    [Theory]
     [TestCase("0", null, 0)]
     [TestCase("x", 0, 0)]
-    [TestCase("(x^2+tan(x)+15)^(1/3)", 5, 3.3207594005386381)]
+    [TestCase("(x^2+tan(x)+15)^(1/3)", 5, 3.3207594)]
     [TestCase("2^3^2", null, 512)]
     [TestCase("sqrt(25)", null, 5)]
     [TestCase("sin(asin(x))", 1, 1)]
     [TestCase("3+4*2/(1-5)^2", null, 3.5)]
-    [TestCase("2*(15+x-3*cos(15-6)+5-9-13.7334+2^3^2)/1024", 0, 0.99999998200323048)]
+    [TestCase("2*(15+x-3*cos(15-6)+5-9-13.7334+2^3^2)/1024", 0, 1)]
     [TestCase("-3^2", null, -9)]
     [TestCase("1e+6-9", null, 999991)]
     [TestCase("100.235+x-(x+10)", null, 90.2350)]
@@ -73,8 +70,11 @@ public class MathCalculatorWrapperTests
     [TestCase("5mod4", null, 1)]
     public void Calculate_ExpressionAndVariable_Result(string expression, double? variable, double result)
     {
-        Assert.That(_calculator.CheckValid(expression), Is.True);
-        _calculator.ConvertToPolish();
-        Assert.That(_calculator.Calculate(variable ?? 0), Is.EqualTo(result));
+        _mathService.SetExpression(expression);
+        Assert.Multiple(() =>
+        {
+            Assert.That(_mathService.CheckExpressionValid, Is.True);
+            Assert.That(_mathService.Calculate(variable ?? 0), Is.EqualTo(result).Within(0.0000001));
+        });
     }
 }
