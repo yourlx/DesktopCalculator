@@ -6,6 +6,12 @@ public class CppMathServiceTests
 {
     private readonly IMathService _mathService = new CppMathService();
 
+    [OneTimeTearDown]
+    public void Cleanup()
+    {
+        _mathService.Dispose();
+    }
+
     [TestCase("-16-3+9*cos(15mod9)+(-9-2)")]
     [TestCase("(x*ln(sin(x)))/sqrt(x^2+4)+cos(x)*sqrt(x^2+4)/sin(x)")]
     [TestCase("(x^2+tan(x)+15)^(1/3)")]

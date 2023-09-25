@@ -1,6 +1,6 @@
 ﻿namespace Calculator.Core.MathService;
 
-public interface IMathService
+public interface IMathService : IDisposable
 {
     void SetExpression(string expression);
 

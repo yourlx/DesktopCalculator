@@ -2,7 +2,7 @@
 
 namespace Calculator.Core.MathService;
 
-public class CppMathService : IDisposable, IMathService
+public class CppMathService : IMathService
 {
     private readonly IntPtr _calculator = CreateInstance();
 
