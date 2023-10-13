@@ -76,6 +76,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private bool _saveToHistory = true;
 
+    private const int NumberOfPoints = 2500;
+
     public MainWindowViewModel(
         IMathService mathService,
         IHistoryService historyService
@@ -203,12 +205,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void CalculateGraph()
     {
-        const int numberOfPoints = 2500;
-        var step = (XMax!.Value - XMin!.Value) / numberOfPoints;
+        var step = (XMax!.Value - XMin!.Value) / (NumberOfPoints - 1);
 
-        var values = new ObservablePoint[numberOfPoints];
+        var values = new ObservablePoint[NumberOfPoints];
 
-        for (var i = 0; i < numberOfPoints; ++i)
+        for (var i = 0; i < NumberOfPoints; ++i)
         {
             var x = XMin.Value + step * i;
             double? y = _mathService.Calculate(x);
