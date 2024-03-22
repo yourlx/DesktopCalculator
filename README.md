@@ -26,7 +26,7 @@ content [here](./src/Calculator.Application/Assets/Help/Help.md)
 
 Running from CLI:
 
-***Install .NET 7***
+***Install .NET 8***
 
 > cd src/Calculator.Application \
 > dotnet restore \
