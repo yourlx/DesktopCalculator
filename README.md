@@ -3,9 +3,9 @@ Desktop Calculator
 
 <div align="center">
 
-![dotnet](https://img.shields.io/badge/.NET%20-7-512bd4)
-![avalonia](https://img.shields.io/badge/AvaloniaUI-11.0.4-512bd4)
-![livecharts](https://img.shields.io/badge/LiveCharts-2.0.0%20rc1.1-512bd4)
+![dotnet](https://img.shields.io/badge/.NET%20-8-512bd4)
+![avalonia](https://img.shields.io/badge/AvaloniaUI-11.0.10-512bd4)
+![livecharts](https://img.shields.io/badge/LiveCharts-2.0.0%20rc2-512bd4)
 
 </div>
 
