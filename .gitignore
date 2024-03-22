@@ -1,5 +1,8 @@
 ﻿# The start of my custom gitignore - yourlx
 
+# cpp files
+cmake-build-debug/
+
 # Prerequisites
 *.d
 
