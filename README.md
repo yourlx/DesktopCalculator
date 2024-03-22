@@ -41,6 +41,15 @@ Running from CLI:
 - LiveCharts 2
 - NUnit
 
+## Things I wish I could change
+
+- An installer for this app
+- A way to automatically compile C++ source code to dll
+- Better code/architecture :D
+
+Anyway, this is my study project and I think it's maybe even archived or hidden in private in future =)
+Also, C++ part was written some years ago and I wanted to rewrite it for a long time, but I don't wanna do it.
+
 ## License
 
 This repository code is under MIT License. See [LICENSE file](LICENSE) for more info.
